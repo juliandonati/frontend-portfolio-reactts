@@ -1,73 +1,21 @@
-# React + TypeScript + Vite
+> [!NOTE]
+> Este es un proyecto de aprendizaje para aprender a utilizar React, utilizando la API que codifiqué anteriormente con Spring Boot en Java.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<h2>¿Cuáles son las funciones de la página?</h2>
+<p>Las funciones de la página son permitir que distintos usuarios, que puedan registrarse e iniciar sesión, publiquen su portafolio personal, y dicho portafolio contenga sus títulos académicos, experiencia laboral, habilidades y proyectos.</p>
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+<h2>¿Qué herramientas utilicé para el proyecto?</h2>
+<h3>Para el BACKEND</h3>
+<ul> 
+  <li>Java, junto al Framework Spring Boot, y Maven para gestión de dependencias.</li> 
+  <li>JPA e Hibernate, para la especificación e implementación de consultas y repositorios, mapeo objeto-relacional (ORM) y la persistencia de datos</li>
+  <li>El uso de distintas librerías, como MapStruct para el mappeo de dominios a DTO's, o Swagger UI para una interfaz intuítiva y documentación de la API.</li>
+</ul>
+<h3>Para el FRONTEND</h3>
+<ul>
+  <li>TypeScript, con la librería React para simplificar la construcción de componentes individuales y su diseño.</li>
+  <li>La herramienta de desarrollo npm para la gestión de dependencias.</li>
+  <li>El empaquetador y servidor de desarrollo Vite</li>
+  <li>Librerías individuales, como react-cookie para el manejo de cookies en React (y para cumplir con el principio de 'Single Source of Truth')</li>
+</ul>
