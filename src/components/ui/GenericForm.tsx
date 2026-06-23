@@ -14,20 +14,21 @@ export interface FormStructure {
     submitBtnText: string
 }
 
-interface GenericFormProps {
+interface GenericFormProps<T> {
     formStructure: FormStructure,
+    formPath: string,
     formMethod: 'POST' | 'PUT',
-    postFormFunc: undefined | ((parameter) => void)
+    postFormFunc ?: (parameter: T) => void
 }
 
 
 interface FormEntryValue{
     name:string,
-    value: String | Date | File | undefined
+    value: string | Date | File | undefined
 }
 
 
-export default function GenericForm({formStructure, formMethod, postFormFunc}: GenericFormProps): JSX.Element {
+export default function GenericForm<T>({formStructure, formPath, formMethod, postFormFunc}: GenericFormProps<T>): JSX.Element {
     const [formEntryValues,setFormEntryValues] = useState<FormEntryValue[]>(
         formStructure.formEntryList.map((formEntry): FormEntryValue => {
             switch(formEntry.dataType){
@@ -81,7 +82,7 @@ export default function GenericForm({formStructure, formMethod, postFormFunc}: G
 
 
 
-        fetch(`${API_BASE_URL}/auth/login`,{
+        fetch(`${API_BASE_URL}/${formPath}`,{
             method:formMethod,
             headers:{
                 'Content-Type': isDataMultipart ? 'multipart/form-data' : 'application/json'
@@ -92,10 +93,12 @@ export default function GenericForm({formStructure, formMethod, postFormFunc}: G
                 response.json()
                     .then((responseJson) => {
                         console.log("JSON Recibido como respuesta: " + responseJson);
-                        if(postFormFunc)
+                        if(postFormFunc != undefined)
                             postFormFunc(responseJson);
                     })
             )
+            .catch(() => console.log("No se obtuvo rta. del form"));
+        // todo GlobalExceptionHandler
     }
 
     function handleChange(e:ChangeEvent<HTMLInputElement, HTMLInputElement>){

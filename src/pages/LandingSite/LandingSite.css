@@ -3,6 +3,8 @@
     display:flex;
     flex-direction: column;
 
+    padding: 2rem 0;
+
     gap:2rem;
     @media screen and (min-width: 640px){
         gap: 10rem;
@@ -16,11 +18,6 @@
     & #landing-hero{
         text-align: center;
 
-        & h1,h2{
-            font-family: "Story Script", sans-serif;
-            text-shadow: white .3rem .3rem .2rem;
-            color:black;
-        }
         & h1{
             font-size: 3rem;
         }

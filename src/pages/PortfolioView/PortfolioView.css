@@ -1,0 +1,181 @@
+#portfolio-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+
+
+    background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, .7) 10%,
+    rgba(255, 255, 255, .7) 90%,
+    transparent 100%);
+
+
+    & p, h3 {
+        width: 50%;
+    }
+
+    @media (min-width: 640px) {
+        width: 75%;
+
+        & p, h3 {
+            width: 100%;
+        }
+    }
+
+
+    & .portfolio-presentation, .portfolio-aboutme, .portfolio-education, .portfolio-experience, .portfolio-skills{
+        width: 100%;
+        border-top: dashed .2rem black;
+        border-bottom: dashed .2rem black;
+
+        & h3{
+            font-size: 3rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 640px) {
+            border-right: dashed .2rem black;
+            border-left: dashed .2rem black;
+
+            & h3{
+                font-size: 3.5rem;
+            }
+        }
+
+        display: flex;
+        flex-direction: column;
+
+        margin: 0 auto 3rem;
+        padding: 2rem 0;
+    }
+}
+
+.portfolio-presentation {
+    text-align: center;
+
+    gap: 1rem;
+
+
+    & h3 {
+        margin: 1rem auto 0;
+        font-size: 2.5rem;
+    }
+
+    & p {
+        color: darkblue;
+        margin: 0 auto 1rem auto;
+        font-size: 1.5rem;
+    }
+
+    & .portfolio-presentation-title {
+
+        font-size: 2rem;
+        font-family: "Story Script", sans-serif;
+        text-shadow: .2rem .2rem .5rem cornflowerblue;
+    }
+
+    & .portfolio-presentation-desc {
+        padding: 2rem;
+    }
+
+    & .img-container {
+        margin: 0 auto;
+        border-radius: 100%;
+
+        width: 15rem;
+        height: 15rem;
+
+        box-shadow: 0 0 3rem deeppink;
+    }
+
+    @media (min-width: 640px) {
+
+        gap: 1rem;
+
+        & p {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        & .portfolio-presentation-title {
+            font-size: 3rem;
+        }
+
+        & .img-container {
+            width: 25rem;
+            height: 25rem;
+        }
+
+    }
+}
+
+
+.portfolio-aboutme {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+
+    align-items: center;
+    text-align: center;
+
+    gap: 2rem;
+
+    &::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+
+        z-index: -1;
+    }
+
+    & .img-container {
+        position: absolute;
+
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+
+        filter: blur(4px);
+
+        top: 0;
+    }
+}
+
+
+
+.portfolio-education{
+    & ul{
+        display:flex;
+        flex-direction: column;
+        gap:2rem;
+
+
+
+        @media(min-width: 640px){
+            gap:0;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+}
+
+.portfolio-experience{
+    & ul{
+        display:flex;
+        flex-direction: column;
+        gap: 2rem;
+
+
+        @media (min-width: 640px) {
+            flex-direction: row;
+            gap:0;
+            flex-wrap: wrap;
+        }
+    }
+}

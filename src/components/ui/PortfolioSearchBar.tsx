@@ -7,6 +7,7 @@ import {useDebounce, type ResetTimeout} from "../../hooks/useDebounce.ts";
 import {getUserPageByName} from "../../services/userService.ts";
 import type {User} from "../../types/User.ts";
 import type {PageResponse} from "../../types/PageResponse.ts";
+import {useNavigate} from "react-router-dom";
 
 
 const searchDebounceTime = 500;
@@ -17,7 +18,9 @@ interface PortfolioResultProps{
 }
 
 const PortfolioResultItem = ({user}: PortfolioResultProps) => {
-    return (<li>
+    const navigate = useNavigate();
+
+    return (<li onClick={() => navigate(`/u/${user.username}/view`)}>
         {user.displayName} ({user.username})
     </li>);
 }

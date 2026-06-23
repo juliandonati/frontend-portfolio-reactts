@@ -1,44 +1,36 @@
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
 import Navbar from "./components/layout/Navbar/Navbar.tsx";
 import Footer from "./components/layout/Footer/Footer.tsx";
-
 import LandingSite from "./pages/LandingSite/LandingSite.tsx";
-
-import {type JSX, useState} from "react";
-import {useCookies} from "react-cookie";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import ControlPanel from "./pages/ControlPanel/ControlPanel.tsx";
+import {PortfolioView} from "./pages/PortfolioView/PortfolioView.tsx";
+import {PortfolioEdit} from "./pages/PortfolioEdit/PortfolioEdit.tsx"
 
 export interface Token{
     "tokenType":"string",
     "accessToken":"string"
 }
 
+export default function App(){
+    return(
+        <BrowserRouter>
+            <header>
+                <Navbar/>
+            </header>
 
-function App() {
-    const [actualPage, setPage] = useState(<LandingSite/>);
+            <main>
+                <Routes>
+                    <Route path="/" element={<LandingSite/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/control-panel" element={<ControlPanel/>}/>
+                    <Route path="/u/:username/view" element={<PortfolioView/>}/>
+                    <Route path="/u/:username/edit" element={<PortfolioView/>}/>
+                </Routes>
+            </main>
 
-    const componentDictionary = new Map<string,JSX.Element>([
-            ["LandingSite", <LandingSite/>],
-            ["LoginPage", <LoginPage/>]
-        ]
+            <Footer/>
+        </BrowserRouter>
     );
-
-    const changePageTo = (pageName : string): void =>{
-        const pageElement = componentDictionary.get(pageName);
-        if(pageElement)
-            setPage(pageElement);
-    }
-
-  return (
-    <>
-        <header>
-            <Navbar changePageTo={changePageTo}/>
-        </header>
-        <main>
-            {actualPage}
-        </main>
-        <Footer/>
-    </>
-  );
 }
-
-export default App

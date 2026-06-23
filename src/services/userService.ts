@@ -14,3 +14,4 @@ export async function getUserPageByName(name : string): Promise<PageResponse<Use
 
     return await response.json();
 }
+

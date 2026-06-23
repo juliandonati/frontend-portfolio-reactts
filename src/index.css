@@ -20,15 +20,40 @@ html{
 }
 
 body{
-  background-image: url("./assets/background.svg");
-  background-repeat: repeat;
-  background-size: 100% auto;
-
   &::before{
+    display:inline-block;
     content: "";
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 
+    position: fixed;
+    z-index: -5;
+
+
+
+    background-image: url("./assets/background.svg");
+    background-repeat: repeat;
+    background-size: 100% auto;
+
+    filter: blur(1rem);
+  }
+
+  &{
+    color:black;
+  }
+  & h1,h2,h3,h4,h5,h6{
+    text-shadow: white .3rem .3rem .2rem;
+    font-family: "Story Script", sans-serif;
+  }
+  & h3{
+    text-align: center;
+    margin: 2rem 0;
+    font-size:2rem;
+
+    text-decoration: underline deeppink;
+  }
+  & p{
+    font-family: "Roboto Light", sans-serif;
   }
 }
 
@@ -36,11 +61,20 @@ main{
   display:inline-block;
   flex-grow: 1;
 
-  padding: 2rem;
-
 
 }
 
 .hidden{
   display:none;
+}
+
+.img-container{
+  display: inline-block;
+  overflow: hidden;
+
+  & img{
+    object-fit:cover;
+    width: 100%;
+    height: 100%;
+  }
 }

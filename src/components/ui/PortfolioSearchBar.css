@@ -30,10 +30,11 @@
             border-left: .1rem solid black;
             border-bottom: .2rem solid white;
 
-            transition: all .3s ease-in;
+            transition: all .2s ease-in;
             @media screen and (min-width: 640px) {
                 &:hover{
                     background-color: navajowhite;
+                    cursor:pointer;
                 }
             }
 

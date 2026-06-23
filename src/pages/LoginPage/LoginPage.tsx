@@ -4,15 +4,26 @@ import {useCookies} from "react-cookie";
 
 import {type JSX} from "react";
 import LandingSite from "../LandingSite/LandingSite.tsx";
+import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
+import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
 
+import './LoginPage.css'
 
 export default function LoginPage(): JSX.Element {
     const [cookies, setCookie] = useCookies(["accessToken"]);
+    const {isErrorOpen, errorMessage, showError, hideError} = useErrorDialog();
 
 
     if(cookies.accessToken == undefined) {
         const setAccessToken = (token: Token) => {
             setCookie("accessToken", token.accessToken);
+        }
+
+        const login = (token: Token):void => {
+            if(token.accessToken)
+                setAccessToken(token);
+            else
+                showError("Usuario o contraseña incorrectos");
         }
 
         const loginFormStructure: FormStructure = {
@@ -25,9 +36,10 @@ export default function LoginPage(): JSX.Element {
         }
 
         return (
-            <>
-                <GenericForm formStructure={loginFormStructure} formMethod={'POST'} postFormFunc={setAccessToken}/>
-            </>
+            <div id="login-page">
+                <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
+                <GenericForm<Token> formStructure={loginFormStructure} formPath={'auth/login'} formMethod={'POST'} postFormFunc={login}/>
+            </div>
         );
     }
     else

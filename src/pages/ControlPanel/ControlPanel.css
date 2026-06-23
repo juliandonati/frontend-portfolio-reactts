@@ -1,0 +1,35 @@
+.user-controlpanel-options{
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    list-style:none;
+
+    gap:1rem;
+    & li{
+        padding:1rem;
+        background-color: white;
+        width: 75%;
+
+        margin: 0 auto;
+
+        border:outset .2rem white;
+        border-radius: 2rem;
+
+        font-weight: bold;
+    }
+}
+
+@media(min-width: 640px){
+    .user-controlpanel-options li{
+        width: 35%;
+        font-size: 1.5rem;
+
+        border-width: .4rem;
+
+        cursor: pointer;
+        transition: all .2s ease-in;
+        &:hover{
+            background-color: antiquewhite;
+        }
+    }
+}
