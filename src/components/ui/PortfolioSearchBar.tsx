@@ -1,5 +1,3 @@
-import './PortfolioSearchBar.css'
-
 import {useState} from "react";
 import {useDebounce, type ResetTimeout} from "../../hooks/useDebounce.ts";
 
@@ -20,13 +18,27 @@ interface PortfolioResultProps{
 const PortfolioResultItem = ({user}: PortfolioResultProps) => {
     const navigate = useNavigate();
 
-    return (<li onClick={() => navigate(`/u/${user.username}/view`)}>
-        {user.displayName} ({user.username})
+    return (<li
+        className="
+        h-12 w-full
+        text-2xl
+        border-black border-2 border-t-0
+
+        flex gap-5
+        items-center
+
+        bg-white
+        hover:bg-blue-300 cursor-pointer select-none
+        "
+
+        onClick={() => navigate(`/u/${user.username}/view`)}>
+        <i className="fa-solid fa-magnifying-glass"></i>
+        <p>{user.displayName} ({user.username})</p>
     </li>);
 }
 
-function PortfolioSearchBar(){
-    const [searchFilter,setSearchFilter] = useState('');
+function PortfolioSearchBar() {
+    const [searchFilter, setSearchFilter] = useState('');
     const [searchResultList, setSearchResultList] = useState<User[]>([]);
     const resetTimeout : ResetTimeout = useDebounce(searchFor,searchDebounceTime);
 
@@ -39,14 +51,26 @@ function PortfolioSearchBar(){
     }
 
     return(
-        <div className="PortfolioSearchBar">
-            <input onChange={(e) => {
+        <div className="w-full font-sans">
+            <input
+                className="1
+                w-full h-1/3 text-2xl
+                border-2 border-black rounded-2xl
+                bg-white
+                focus:bg-blue-100 focus:border-blue-300 focus:outline-none
+                "
+
+                onChange={(e) => {
                 const newSearchFilter = e.currentTarget.value;
                 setSearchFilter(newSearchFilter);
                 resetTimeout(newSearchFilter);
             }}
                    value={searchFilter} type="search" placeholder="Nombre del Portafolio"/>
-            <ul>
+            <ul className="
+            w-full
+            h-2/3 overflow-y-scroll
+            scrollbar-none
+            ">
                 {searchResultList.map((user,index) => (<PortfolioResultItem key={index} user={user}/>))}
             </ul>
         </div>

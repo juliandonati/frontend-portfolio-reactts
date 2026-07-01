@@ -1,4 +1,4 @@
-type presentation = {
+export type Presentation = {
     id: number,
     name: string,
     title: string,
@@ -6,7 +6,7 @@ type presentation = {
     imgUrl: string
 }
 
-type aboutMe = {
+export type AboutMe = {
     id: number,
     title: string,
     description: string,
@@ -15,7 +15,7 @@ type aboutMe = {
     buttonUrl: string
 }
 
-type degree = {
+export type Degree = {
     id: number,
     name: string,
     description: string,
@@ -24,7 +24,7 @@ type degree = {
     imgUrl: string
 }
 
-type skill = {
+export type Skill = {
     id: number,
     name: string,
     description: string,
@@ -33,7 +33,7 @@ type skill = {
     category: string
 }
 
-type job = {
+export type Job = {
     id: number,
     name: string,
     position: string,
@@ -44,9 +44,9 @@ type job = {
 
 export type Portfolio = {
     owner: string,
-    presentation: presentation,
-    aboutMe: aboutMe,
-    degrees: degree[],
-    skills: skill[],
-    experience: job[]
+    presentation: Presentation,
+    aboutMe: AboutMe,
+    degrees: Degree[],
+    skills: Skill[],
+    experience: Job[]
 }

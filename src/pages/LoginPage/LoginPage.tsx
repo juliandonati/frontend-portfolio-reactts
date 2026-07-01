@@ -7,23 +7,16 @@ import LandingSite from "../LandingSite/LandingSite.tsx";
 import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
 import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
 
-import './LoginPage.css'
-
 export default function LoginPage(): JSX.Element {
     const [cookies, setCookie] = useCookies(["accessToken"]);
     const {isErrorOpen, errorMessage, showError, hideError} = useErrorDialog();
 
 
+
+
     if(cookies.accessToken == undefined) {
         const setAccessToken = (token: Token) => {
-            setCookie("accessToken", token.accessToken);
-        }
-
-        const login = (token: Token):void => {
-            if(token.accessToken)
-                setAccessToken(token);
-            else
-                showError("Usuario o contraseña incorrectos");
+            setCookie("accessToken", token.accessToken,{path:'/',maxAge:1800});
         }
 
         const loginFormStructure: FormStructure = {
@@ -36,9 +29,12 @@ export default function LoginPage(): JSX.Element {
         }
 
         return (
-            <div id="login-page">
+            <div className="
+            grid-rows-[1fr_4fr]
+            ">
                 <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
-                <GenericForm<Token> formStructure={loginFormStructure} formPath={'auth/login'} formMethod={'POST'} postFormFunc={login}/>
+                <GenericForm<Token> formStructure={loginFormStructure} formPath={'auth/login'} formMethod={'POST'} postFormFunc={setAccessToken}
+                postErrorCallback={()=>showError("Usuario o contraseña incorrectos")}/>
             </div>
         );
     }

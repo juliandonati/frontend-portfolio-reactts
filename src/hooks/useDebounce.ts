@@ -1,4 +1,4 @@
-import {useRef, useEffect} from "react";
+import {useRef, useEffect, useCallback} from "react";
 
 export type ResetTimeout = (...parameters : string[]) => void;
 
@@ -20,12 +20,13 @@ export function useDebounce(func : TimerHandler, debounceTime : number) : ResetT
     // SI NO HAY ARRAY, CORRE EN CADA CAMBIO
     // SI EL ARRAY TIENE DEPENDENCIAS, CORRE POR CADA CAMBIO EN LA DEPENDENCIA
 
-
-    return function resetTimeout(...parameters:string[]) : void{
+    const resetTimeout = useCallback((...parameters:string[]) => {
         if(debounceTimeout.current != undefined)
             clearTimeout(debounceTimeout.current);
 
         debounceTimeout.current = setTimeout(func,debounceTime,...parameters);
-    }
+    },[func,debounceTime]);
+
+    return resetTimeout;
 }
 

@@ -1,80 +1,181 @@
-@import url('https://fonts.googleapis.com/css2?family=Story+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Castoro+Titling&family=Story+Script&display=swap');
+@import "tailwindcss";
 
-:root{
-  --nav-bg-color: rgba(0,0,0,.3);
-  --footer-bg-color: rgba(0,0,0,.5);
+@theme{
+    --font-display: "Story Script", "sans-serif";
+    --font-boton: "Castoro Titling", "sans-serif";
+
+    --color-primario: #F62DAE;
+    --color-secundario: #F7EDF0;
+
+    --color-btn-principal: #253C78;
+    --color-btn-secundario: #296205;
+    --color-btn-terciario: #FC7753;
+
+    --color-card: rgba(0,0,0,.03);
 }
-#root{
-  display:flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* Solo utilizaré el index.css para lo que es global, el resto lo voy a traducir a TailwindCSS*/
+
+@layer components { /* Luego puedo dividirlo en varios .css, y utilizar import acá, en el index.css */
+    .btn-primario {
+        @apply h-18 w-auto
+        text-3xl content-center font-boton lg:p-4 bg-btn-principal text-secundario shadow-xl shadow-secundario rounded-full
+        transition duration-300 ease-in-out
+        hover:bg-secundario hover:text-btn-principal hover:shadow-btn-principal cursor-pointer select-none
+    }
+
+    .btn-secundario {
+        @apply h-18 w-auto
+        text-3xl content-center font-boton p-4 bg-btn-secundario text-secundario shadow-xl shadow-secundario rounded-full
+        transition duration-300 ease-in-out
+        hover:bg-secundario hover:text-btn-secundario hover:shadow-btn-secundario cursor-pointer select-none
+    }
+
+    .dialog{
+        & div{
+            & strong{
+                @apply text-4xl
+            }
+            & p{
+                @apply text-2xl
+            }
+            & button{
+                @apply text-2xl cursor-pointer bg-black
+                rounded-2xl w-1/3 mx-auto
+                transition-colors duration-150 ease-in-out
+                hover:bg-white hover:text-black
+            }
+
+            @apply
+            my-auto
+            w-5/6 lg:w-1/2 h-1/4 lg:h-1/3
+            grid grid-rows-3
+            p-8
+            font-sans
+            rounded-4xl
+        }
+        @apply fixed flex flex-col
+        items-center
+        top-0 left-0
+        w-screen h-full
+        text-white
+        z-50
+    }
+
+    /* GenericForm */
+    .form-entry {
+        @apply grid grid-cols-2 gap-4 items-center w-full max-w-200
+    }
+
+    .form-label{
+        @apply text-4xl text-right
+    }
+
+    .form-input{
+        @apply h-8 w-full max-w-88 text-2xl border border-gray-300 rounded-lg p-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500
+    }
+
+    .form-file-input{
+        @apply file:bg-btn-secundario file:text-secundario font-sans file:border-2 file:border-secundario file:w-30 file:h-10
+        hover:file:bg-secundario hover:file:border-btn-secundario hover:file:text-btn-secundario
+    }
+
+    /* PortfolioView */
+    .portfolio-section{
+        @apply md:py-8
+        bg-secundario
+        border-t-3 border-b-3 md:border-3 border-dashed border-primario
+            shadow-2xl
+        shadow-black
+        w-full
+        z-0
+    }
+
+    .portfolio-title{
+        @apply text-6xl mt-10 underline decoration-primario mx-auto
+    }
+
+    .portfolio-desc{
+        @apply text-3xl font-sans
+    }
+
+    .portfolio-card-list{
+        @apply  w-9/10 mx-auto my-16
+        flex flex-col gap-8
+        overflow-x-hidden
+        overflow-y-scroll scrollbar-thumb-primario
+        border-b-4 border-t-4 border-primario border-dotted
+    }
+
+    /* PortfolioEdit */
+    .portfolio-edit-section{
+        @apply border-t-4 border-b-4 lg:border-4 border-primario border-dashed py-16 flex flex-col gap-8 bg-secundario
+    }
+
+    /*
+    table
+      thead
+        tr
+          th
+      tbody
+        tr
+          td
+    */
+
+    .portfolio-edit-table{
+        & th,td{
+            @apply border-2 border-black
+        }
+
+    @apply text-2xl w-9/10 mx-auto
 }
 
-*{
-  padding:0;
-  margin: 0;
+    /* Navbar */
+    .navbar-option{
+        @apply
+            text-4xl text-white text-shadow-lg text-shadow-black
+
+        mx-auto my-5
+        md:font-display md:text-6xl md:cursor-pointer md:text-shadow-lg
+        md:text-black md:text-shadow-secundario
+            md:transition md:duration-300 md:ease-in-out
+        md:hover:text-secundario md:hover:text-shadow-primario
+    }
+
+    /* Footer */
+    .footer-li{
+        @apply m-auto font-display text-2xl lg:text-5xl text-secundario text-shadow-lg text-shadow-black
+    }
 }
 
-html{
-  font-size: 62.5%
+
+:root {
+    --nav-bg-color: rgba(0, 0, 0, .3);
+    --footer-bg-color: rgba(0, 0, 0, .5);
 }
 
-body{
-  &::before{
-    display:inline-block;
-    content: "";
-    width: 100vw;
-    height: 100vh;
-
-    position: fixed;
-    z-index: -5;
-
-
-
-    background-image: url("./assets/background.svg");
-    background-repeat: repeat;
-    background-size: 100% auto;
-
-    filter: blur(1rem);
-  }
-
-  &{
-    color:black;
-  }
-  & h1,h2,h3,h4,h5,h6{
-    text-shadow: white .3rem .3rem .2rem;
-    font-family: "Story Script", sans-serif;
-  }
-  & h3{
-    text-align: center;
-    margin: 2rem 0;
-    font-size:2rem;
-
-    text-decoration: underline deeppink;
-  }
-  & p{
-    font-family: "Roboto Light", sans-serif;
-  }
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-main{
-  display:inline-block;
-  flex-grow: 1;
-
-
+html {
+    font-size: 62.5%
 }
 
-.hidden{
-  display:none;
+body {
+    overflow-x: hidden;
+    &::before {
+        content: "";
+        position: fixed;
+
+        inset: -1rem;
+        z-index: -5;
+
+        background-image: url("./assets/background.svg");
+        background-size: 100% auto;
+        filter: blur(.5rem);
+    }
 }
 
-.img-container{
-  display: inline-block;
-  overflow: hidden;
-
-  & img{
-    object-fit:cover;
-    width: 100%;
-    height: 100%;
-  }
-}

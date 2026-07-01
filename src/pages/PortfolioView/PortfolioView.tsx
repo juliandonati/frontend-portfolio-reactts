@@ -1,99 +1,111 @@
-import {type JSX, useEffect, useState} from "react";
-import {getUserPortfolioByName} from "../../services/portfolioService.ts";
+import {type JSX} from "react";
 
-import {useParams} from "react-router-dom";
-import type {Portfolio} from "../../types/Portfolio.ts";
+import type {Portfolio, Presentation} from "../../types/Portfolio.ts";
 
-import "./PortfolioView.css"
 import {Degree} from "../../components/portfolio/Degree/Degree.tsx";
 import {Job} from "../../components/portfolio/Job/Job.tsx";
 import {Skill} from "../../components/portfolio/Skill/Skill.tsx";
 
-
-interface PortfolioResult {
-    error?: Error,
-    portfolio?: Portfolio
+interface PortfolioViewProps {
+    portfolio: Portfolio,
+    username: string
 }
 
-export function PortfolioView(): JSX.Element {
-    const [portfolioResult, setPortfolioResult] = useState<PortfolioResult>({error: undefined, portfolio: undefined});
+export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.Element {
+    const presentation = portfolio.presentation ? portfolio.presentation : {id:-1, name: username, title:'Mi título', imgUrl: '', description: 'Aquí va mi descripción'} as Presentation;
+    const aboutMe = portfolio.aboutMe;
+    const degrees = portfolio.degrees;
+    const jobs = portfolio.experience;
+    const skills = portfolio.skills;
+    return (
+        <div className="
+        flex flex-col w-full items-center
+        gap-4
+        md:w-2/3
+        ">
+
+            <div
+                className="portfolio-section grid grid-rows-[1fr_1fr_5fr_1fr] w-full
+                        justify-items-center text-center
+                        h-120vh
+                        md:h-[80vh]">
+                <h3 className="portfolio-title">¡Hola, soy {presentation.name}!</h3>
+                <p className="text-4xl">{presentation.title}</p>
+                <div className="w-96 h-96 mx-auto overflow-hidden shadow-xl shadow-pink-500 rounded-full">
+                    <img alt={`Imagen de ${presentation.name}`} src={presentation.imgUrl}
+                         className="object-cover"/>
+                </div>
+                <p className="portfolio-desc">{presentation.description}</p>
+            </div>
 
 
-    const {username} = useParams<string>();
-    useEffect(() => {
-        if (username)
-            getUserPortfolioByName(username)
-                .then(foundPortfolio => {
-                    setPortfolioResult({error: undefined, portfolio: foundPortfolio});
-                })
-                .catch((error: Error) => {
-                    setPortfolioResult({error: error, portfolio: undefined});
-                }/*mostrar dialogo de error*/);
-        else {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setPortfolioResult({error: new Error("Tienes que especificar el usuario de quien buscas el portafolio.")});
-        }
-    }, [username]);
-
-    if (portfolioResult.portfolio) {
-        const portfolio = portfolioResult.portfolio;
-        const presentation = portfolio.presentation;
-        const aboutMe = portfolio.aboutMe;
-        const degrees = portfolio.degrees;
-        const jobs = portfolio.experience;
-        const skills = portfolio.skills;
-        return (
-
-                <div id="portfolio-view">
-                    <div className="portfolio-presentation">
-                        <h3>¡Hola, soy {presentation.name}!</h3>
-                        <p className="portfolio-presentation-title">{presentation.title}</p>
-                        <div className="img-container">
-                            <img alt={`Imagen de ${presentation.name}`} src={presentation.imgUrl}/>
-                        </div>
-                        <p className="portfolio-presentation-desc">{presentation.description}</p>
+            {
+                aboutMe &&
+                <div className="portfolio-section relative w-full h-100 overflow-hidden">
+                    <div className="w-full h-100 absolute top-0 left-0">
+                        <img
+                            className="absolute z-0 object-cover w-full h-full"
+                            alt={`Fondo del AboutMe de ${presentation.name}`}
+                            src={aboutMe.bgImgUrl ? aboutMe.bgImgUrl : "https://wallpaperaccess.com/full/2033886.jpg"}
+                        />
+                        <div className="absolute z-10 object-cover w-full h-full bg-secundario opacity-75"/>
                     </div>
-                    <div className="portfolio-aboutme">
-                        <div className="img-container">
-                            <img alt={`Fondo del AboutMe de ${presentation.name}`} src={aboutMe.bgImgUrl ? aboutMe.bgImgUrl : "https://wallpaperaccess.com/full/2033886.jpg"}/>
-                        </div>
-                        <h3>{aboutMe.title}</h3>
-                        <p className="portfolio-aboutme-desc">{aboutMe.description}</p>
-                        <button className={!aboutMe.buttonText ? 'hidden' : 'portfolio-aboutme-button'} onClick={() => location.href = aboutMe.buttonUrl}>{aboutMe.buttonText}</button>
-                    </div>
-                    <div className={degrees.length == 0 ? "hidden" : "portfolio-education"}>
-                        <h3>MÍS TÍTULOS</h3>
-                        <ul>
-                          {degrees.map(degree => <Degree key={degree.id} name={degree.name} startDate={degree.startDate} endDate={degree.endDate} description={degree.description} imgUrl={degree.imgUrl}/>)}
-                        </ul>
-                    </div>
-                    <div className={jobs.length == 0 ? "hidden" : "portfolio-experience"}>
-                        <h3>MI EXPERIENCIA</h3>
-                        <ul>
-                            {jobs.map(job => <Job key={job.id} name={job.name} description={job.description} startDate={job.startDate} endDate={job.endDate} position={job.position} />)}
-                        </ul>
-                    </div>
-                    <div className={skills.length == 0 ? "hidden" : "portfolio-skills"}>
-                        <h3>MIS HABILIDADES</h3>
-                        <ul>
-                            {skills.map(skill => <Skill key={skill.id} name={skill.name} description={skill.description} imgUrl={skill.imgUrl} category={skill.category} level={skill.level}/>)}
-                        </ul>
+                    <div className="
+                    relative w-full h-full z-20 text-center
+                    grid grid-rows-[1fr_2fr_1fr]
+                    ">
+                        <h3 className="portfolio-title">{aboutMe.title}</h3>
+                        <p className="portfolio-desc m-auto">{aboutMe.description}</p>
+                        {aboutMe.buttonText && aboutMe.buttonUrl && <button
+                            className="btn-primario w-1/4 m-auto"
+                            onClick={() => location.href = aboutMe.buttonUrl}>{aboutMe.buttonText}</button>}
                     </div>
                 </div>
-        );
-    }
-    else{
-        if(portfolioResult.error)
-            return(
-                <>
-                    <p>¡Lo sentimos! No pudimos cargar el portafolio que buscas. ERROR: {portfolioResult.error.message}</p>
-                </>
-            );
-        else
-            return(
-                <>
-                    <p>Cargando portafolio...</p>
-                </>
-            );
-    }
+            }
+            {
+                degrees.length > 0 &&
+                <div className="
+                portfolio-section grid grid-rows-[10rem_40rem]
+                ">
+                    <h3 className="portfolio-title">Mi educación</h3>
+                    <ul className="portfolio-card-list">
+                        {degrees.map(degree => <Degree key={degree.id} name={degree.name}
+                                                       startDate={degree.startDate}
+                                                       endDate={degree.endDate} description={degree.description}
+                                                       imgUrl={degree.imgUrl}/>)}
+                    </ul>
+                </div>
+            }
+            {
+                jobs.length > 0 &&
+                <div className="
+                portfolio-section h-200 grid grid-rows[10rem_40rem]
+                ">
+                    <h3 className="portfolio-title">Mi experiencia</h3>
+                    <ul className="portfolio-card-list">
+                        {jobs.map(job => <Job key={job.id} name={job.name} description={job.description}
+                                              startDate={job.startDate} endDate={job.endDate}
+                                              position={job.position}/>)}
+                    </ul>
+                </div>
+            }
+            {
+                skills.length > 0 &&
+                <div className="portfolio-section grid grid-rows[10rem_40rem]">
+                    <h3 className="portfolio-title">MIS HABILIDADES</h3>
+                    <ul className="
+                    px-8 my-16
+
+                    flex flex-col gap-y-10
+
+                    md:grid md:grid-cols-3 md:gap-y-20
+                    ">
+                        {skills.map(skill => <Skill key={skill.id} name={skill.name} description={skill.description}
+                                                    imgUrl={skill.imgUrl} category={skill.category}
+                                                    level={skill.level}/>)}
+                    </ul>
+                </div>
+            }
+        </div>
+    );
 }
