@@ -42,7 +42,7 @@ export function EditTable<T extends PortfolioItem>({
     }
 
 
-    const turnValueIntoString = (itemValue): string => {
+    const turnValueIntoString = (itemValue: File | undefined | null): string => {
         if (itemValue)
             return itemValue.toString();
 
@@ -62,7 +62,7 @@ export function EditTable<T extends PortfolioItem>({
                 {data.map((item: T) =>
                     <tr>
                         {Object.values(item as Record<string, any>).map((value) =>
-                            <td>{turnValueIntoString(value)}</td>
+                            <td>{typeof(value) === 'string' ? value : turnValueIntoString(value)}</td> // todo Si hay una URL de imagen, mostrar la imagen
                         )}
                         <td>
                             <ul className="grid grid-cols-2 px-4 gap-8">

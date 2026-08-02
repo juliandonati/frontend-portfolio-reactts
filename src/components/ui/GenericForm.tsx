@@ -131,7 +131,7 @@ export default function GenericForm<T>({
                             response.text()
                                 .then((responseText)=>{
                                     if (postFormFunc != undefined)
-                                        postFormFunc(responseText);
+                                        postFormFunc(responseText as unknown as T);
                                 })
                     }
                     else
