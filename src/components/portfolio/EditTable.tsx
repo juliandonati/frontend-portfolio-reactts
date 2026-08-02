@@ -41,14 +41,6 @@ export function EditTable<T extends PortfolioItem>({
             .catch((error: Error) => showErrorCallback(error.message));
     }
 
-
-    const turnValueIntoString = (itemValue: File | undefined | null): string => {
-        if (itemValue)
-            return itemValue.toString();
-
-        return 'N/A';
-    }
-
     return (
         <div className="w-5/6 mx-auto overflow-x-auto scrollbar-thumb-primario">
             <table className="portfolio-edit-table">
@@ -59,20 +51,32 @@ export function EditTable<T extends PortfolioItem>({
                 </tr>
                 </thead>
                 <tbody>
-                {data.map((item: T) =>
+                {data.map((item:T) =>
                     <tr>
-                        {Object.values(item as Record<string, any>).map((value) =>
-                            <td>{typeof(value) === 'string' ? value : turnValueIntoString(value)}</td> // todo Si hay una URL de imagen, mostrar la imagen
+                        {Object.values(item as Record<string, unknown>).map((value) => {
+                                const valueAsString = typeof value === 'string' ? value : String(value);
+
+                                const isImageUrl:boolean = valueAsString.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) != null || valueAsString.startsWith('blob:');
+
+                                return (
+                                    <td>
+                                        {!isImageUrl ? (<p>valueAsString</p>) : (<img src={valueAsString}/>)}
+                                    </td>);
+                            }
                         )}
                         <td>
                             <ul className="grid grid-cols-2 px-4 gap-8">
                                 <li onClick={() =>
                                     navigate(`/${itemName}/${item.id}/edit`, {
-                                        state:item
+                                        state: item
                                     })}>
-                                    <i title="Editar" className="fa fa-edit text-yellow-500 text-shadow-md text-shadow-black cursor-pointer select-none"/></li>
+                                    <i title="Editar"
+                                       className="fa fa-edit text-yellow-500 text-shadow-md text-shadow-black cursor-pointer select-none"/>
+                                </li>
                                 <li onClick={() => deleteItem(item.id)}>
-                                    <i title="Eliminar" className="fa fa-trash text-red-700 text-shadow-md text-shadow-black cursor-pointer select-none"/></li>
+                                    <i title="Eliminar"
+                                       className="fa fa-trash text-red-700 text-shadow-md text-shadow-black cursor-pointer select-none"/>
+                                </li>
                             </ul>
                         </td>
                     </tr>)}

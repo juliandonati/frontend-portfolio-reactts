@@ -56,13 +56,13 @@ export function PortfolioEdit({portfolio, username}: PortfolioEditProps): JSX.El
 
         let presentation;
         if (portfolio.presentation) {
-            const {id, ...presentationWithoutId} = portfolio.presentation;
+            const {id:_, ...presentationWithoutId} = portfolio.presentation;
             presentation = presentationWithoutId;
         }
 
         let aboutMe;
         if (portfolio.aboutMe) {
-            const {id, ...aboutMeWithoutId} = portfolio.aboutMe;
+            const {id:_, ...aboutMeWithoutId} = portfolio.aboutMe;
             aboutMe = aboutMeWithoutId;
         }
 
