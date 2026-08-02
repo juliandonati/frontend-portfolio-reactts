@@ -67,7 +67,7 @@ export function EditTable<T extends PortfolioItem>({
                         <td>
                             <ul className="grid grid-cols-2 px-4 gap-8">
                                 <li onClick={() =>
-                                    navigate(`/${itemName}/${item.id}/edit`,{
+                                    navigate(`/${itemName}/${item.id}/edit`, {
                                         state:item
                                     })}>
                                     <i title="Editar" className="fa fa-edit text-yellow-500 text-shadow-md text-shadow-black cursor-pointer select-none"/></li>

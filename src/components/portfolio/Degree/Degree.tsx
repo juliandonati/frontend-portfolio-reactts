@@ -21,7 +21,7 @@ export function Degree({name, description, startDate, endDate, imgUrl}: DegreePr
         overflow-hidden
 
         relative lg:static
-        w-9/10 h-120 p-4 lg:w-5/6 lg:h-80 lg:p-0
+        w-9/10 h-120 p-4 lg:w-5/6 lg:h-100 lg:p-0
         rounded-2xl lg:rounded-none lg:rounded-tl-[8rem]
         lg:grid lg:grid-cols-[2fr_1fr]
         ">

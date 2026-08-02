@@ -48,24 +48,22 @@ export function PortfolioCreateItem(): JSX.Element {
         submitBtnText: `Guardar ${itemToSubmit}`
     };
 
-    if(itemId)
-        formStructure.formEntryList.push({name:'id',label:'id',dataType:'id'});
-
     let formPath: string;
     switch (itemType) {
         case 'degrees':
             formStructure.formEntryList.push(...degreeFormEntryList);
-            formPath = `degrees/${username}`;
+            formPath = `degrees/`;
             break;
         case 'experience':
             formStructure.formEntryList.push(...jobFormEntryList);
-            formPath = `experience/${username}`;
+            formPath = `experience/`;
             break;
         case 'skills':
             formStructure.formEntryList.push(...skillFormEntryList);
-            formPath = `skills/${username}`;
+            formPath = `skills/`;
             break;
     }
+    formPath = formPath! + (itemId ? itemId : username);
 
 
     /* todo Crear cartel cuando se logra hacer un cambio exitosamente. */

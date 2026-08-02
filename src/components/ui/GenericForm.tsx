@@ -5,7 +5,7 @@ import type {Token} from "../../App.tsx";
 export interface FormEntry {
     name: string;
     label: string;
-    dataType: 'image' | 'date' | 'string' | 'password' | 'id';
+    dataType: 'image' | 'date' | 'string' | 'password';
 }
 
 /* todo Implementar limitaciones de caracteres */
@@ -22,16 +22,16 @@ interface GenericFormProps<T> {
     formStructure: FormStructure;
     formPath: string;
     formMethod: 'POST' | 'PUT';
-    postErrorCallback: (errorMessage:string) => void;
+    postErrorCallback: (errorMessage: string) => void;
     postFormFunc?: (parameter: T) => void;
     token?: Token;
     currentFormData?: Record<string, entryValueType>;
 }
 
-function formatDate(date:Date):string{
+function formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2,'0');
-    const day = String(date.getDate()).padStart(2,'0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
 
@@ -130,28 +130,26 @@ export default function GenericForm<T>({
                         postErrorCallback(response.statusText);
                 }
             )
-            .catch((error:Error) => console.log("ERROR:" + error.message));
+            .catch((error: Error) => console.log("ERROR:" + error.message));
     }
 
     function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
         const {name, type, files, value, valueAsDate} = e.target;
         let newEntryValue;
-        if(type === 'file' && files) {
+        if (type === 'file' && files) {
             newEntryValue = files.length > 0 ? files[0] : undefined;
-            if(newEntryValue instanceof File){
+            if (newEntryValue instanceof File) {
                 const previewUrl = URL.createObjectURL(newEntryValue);
-                setImagePreviews(prev => ({...prev,[name]:previewUrl}));
+                setImagePreviews(prev => ({...prev, [name]: previewUrl}));
             }
-        }
-        else {
+        } else {
             if (type === 'date') {
                 const rawDate = valueAsDate;
                 if (rawDate)
                     newEntryValue = formatDate(rawDate);
                 else
                     newEntryValue = null;
-            }
-            else
+            } else
                 newEntryValue = value;
         }
 
@@ -172,10 +170,8 @@ export default function GenericForm<T>({
                   onSubmit={(e) => submitForm(e)}
                   className="flex flex-col w-full items-center gap-4 py-10"
             >
-                {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element|undefined => {
+                {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element | undefined => {
                     switch (formEntry.dataType) {
-                        case "id":
-                            break;
                         case "string":
                             return (
                                 <div className="form-entry" key={formEntry.name}>
