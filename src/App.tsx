@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import ControlPanel from "./pages/ControlPanel/ControlPanel.tsx";
 import {Portfolio} from "./pages/Portfolio/Portfolio.tsx";
 import {PortfolioCreateItem} from "./pages/PortfolioCreateItem/PortfolioCreateItem.tsx";
+import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 
 export interface Token {
     tokenType: string;
@@ -31,6 +32,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<LandingSite/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/control-panel" element={<ControlPanel/>}/>
                     <Route path="/u/:username/:action" element={<Portfolio/>}/>
                     <Route path="/u/:username/create/:itemType" element={<PortfolioCreateItem/>}/>

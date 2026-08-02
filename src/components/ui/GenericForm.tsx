@@ -119,13 +119,21 @@ export default function GenericForm<T>({
             body: isDataMultipart ? formData : formDataEntryValuesString
         })
             .then((response) => {
-                    if (response.ok)
-                        response.json()
-                            .then((responseJson) => {
-                                console.log("JSON Recibido como respuesta: " + responseJson);
-                                if (postFormFunc != undefined)
-                                    postFormFunc(responseJson);
-                            });
+                    if (response.ok) {
+                        const contentType = response.headers.get("content-type");
+                        if (contentType?.includes("application/json"))
+                            response.json()
+                                .then((responseJson) => {
+                                    if (postFormFunc != undefined)
+                                        postFormFunc(responseJson);
+                                });
+                        else
+                            response.text()
+                                .then((responseText)=>{
+                                    if (postFormFunc != undefined)
+                                        postFormFunc(responseText);
+                                })
+                    }
                     else
                         postErrorCallback(response.statusText);
                 }
@@ -174,7 +182,7 @@ export default function GenericForm<T>({
                     switch (formEntry.dataType) {
                         case "string":
                             return (
-                                <div className="form-entry" key={formEntry.name}>
+                                <div className="form-entry" id={`${formEntry.name}Div`} key={formEntry.name}>
                                     <label htmlFor={formEntry.name}
                                            className="form-label"
                                     >{formEntry.label}:</label>
