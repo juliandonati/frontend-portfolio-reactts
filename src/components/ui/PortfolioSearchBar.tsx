@@ -39,6 +39,7 @@ const PortfolioResultItem = ({user}: PortfolioResultProps) => {
 
 function PortfolioSearchBar() {
     const [searchFilter, setSearchFilter] = useState('');
+    const [startedSearching,setStartedSearching] = useState(false);
     const [searchResultList, setSearchResultList] = useState<User[]>([]);
     const resetTimeout : ResetTimeout = useDebounce(searchFor,searchDebounceTime);
 
@@ -51,10 +52,11 @@ function PortfolioSearchBar() {
     }
 
     return(
-        <div className="w-full font-sans">
+        <div className="w-100 md:w-150 2xl:w-200 mx-auto font-sans">
             <input
                 className="1
                 w-full h-1/3 text-2xl
+                pl-5
                 border-2 border-black rounded-2xl
                 bg-white
                 focus:bg-blue-100 focus:border-blue-300 focus:outline-none
@@ -62,17 +64,31 @@ function PortfolioSearchBar() {
 
                 onChange={(e) => {
                 const newSearchFilter = e.currentTarget.value;
+
+                if(!startedSearching)
+                    setStartedSearching(true);
+
                 setSearchFilter(newSearchFilter);
                 resetTimeout(newSearchFilter);
             }}
                    value={searchFilter} type="search" placeholder="Nombre del Portafolio"/>
+            {
+                searchResultList.length > 0 ? (
             <ul className="
             w-full
             h-2/3 overflow-y-scroll
             scrollbar-none
             ">
                 {searchResultList.map((user,index) => (<PortfolioResultItem key={index} user={user}/>))}
-            </ul>
+            </ul> ) : (
+                <div className="
+                w-full h-1/2 text-2xl 2xl:text-3xl font-bold text-center
+                m-auto pt-5
+                border-x-2 border-b-2 bg-red-300
+                ">
+                    {startedSearching && <p className="">No se encontró ningún portafolio asociado al nombre introducido</p>}
+                </div>)
+            }
         </div>
     );
 }
