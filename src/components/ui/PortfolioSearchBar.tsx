@@ -81,12 +81,13 @@ function PortfolioSearchBar() {
             ">
                 {searchResultList.map((user,index) => (<PortfolioResultItem key={index} user={user}/>))}
             </ul> ) : (
-                <div className="
+                    startedSearching &&
+                    <div className="
                 w-full h-1/2 text-2xl 2xl:text-3xl font-bold text-center
                 m-auto pt-5
                 border-x-2 border-b-2 bg-red-300
                 ">
-                    {startedSearching && <p className="">No se encontró ningún portafolio asociado al nombre introducido</p>}
+                    <p className="">No se encontró ningún portafolio asociado al nombre introducido</p>
                 </div>)
             }
         </div>
