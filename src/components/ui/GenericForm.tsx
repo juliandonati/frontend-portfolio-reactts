@@ -65,6 +65,7 @@ export default function GenericForm<T>({
                 , {} as Record<string, entryValueType>) :
             currentFormData
     );
+    const [imagePreviews, setImagePreviews] = useState<Record<string, string>>({});
 
 
     function submitForm(e: React.SubmitEvent<HTMLElement>) {
@@ -133,24 +134,29 @@ export default function GenericForm<T>({
     }
 
     function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
-        e.preventDefault();
+        const {name, type, files, value, valueAsDate} = e.target;
         let newEntryValue;
-        if(e.target.type === 'file' && e.target.files)
-            newEntryValue = e.target.files.length > 0 ? e.target.files[0] : undefined;
+        if(type === 'file' && files) {
+            newEntryValue = files.length > 0 ? files[0] : undefined;
+            if(newEntryValue instanceof File){
+                const previewUrl = URL.createObjectURL(newEntryValue);
+                setImagePreviews(prev => ({...prev,[name]:previewUrl}));
+            }
+        }
         else {
-            if (e.target.type === 'date') {
-                const rawDate = e.target.valueAsDate;
+            if (type === 'date') {
+                const rawDate = valueAsDate;
                 if (rawDate)
                     newEntryValue = formatDate(rawDate);
                 else
                     newEntryValue = null;
             }
             else
-                newEntryValue = e.target.value;
+                newEntryValue = value;
         }
 
         setFormEntryValues((prevValues) => (
-            {...prevValues, [e.target.name]: newEntryValue}
+            {...prevValues, [name]: newEntryValue}
         ));
     }
 
@@ -166,13 +172,13 @@ export default function GenericForm<T>({
                   onSubmit={(e) => submitForm(e)}
                   className="flex flex-col w-full items-center gap-4 py-10"
             >
-                {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element => {
+                {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element|undefined => {
                     switch (formEntry.dataType) {
                         case "id":
                             break;
                         case "string":
                             return (
-                                <div className="form-entry">
+                                <div className="form-entry" key={formEntry.name}>
                                     <label htmlFor={formEntry.name}
                                            className="form-label"
                                     >{formEntry.label}:</label>
@@ -184,7 +190,7 @@ export default function GenericForm<T>({
                             );
                         case "password":
                             return (
-                                <div className="form-entry">
+                                <div className="form-entry" key={formEntry.name}>
                                     <label htmlFor={formEntry.name}
                                            className="form-label"
                                     >{formEntry.label}:</label>
@@ -196,7 +202,7 @@ export default function GenericForm<T>({
                             );
                         case "date":
                             return (
-                                <div className="form-entry">
+                                <div className="form-entry" key={formEntry.name}>
                                     <label htmlFor={formEntry.name}
                                            className="form-label"
                                     >{formEntry.label}:</label>
@@ -206,22 +212,27 @@ export default function GenericForm<T>({
                                     ></input>
                                 </div>
                             );
-                        case "image":
+                        case "image": {
+                            const previewSrc = imagePreviews[formEntry.name] || (typeof formEntryValues[formEntry.name] === 'string' ? formEntryValues[formEntry.name] as string : undefined);
                             return (
-                                <div className="form-entry flex flex-col">
+                                <div className="form-entry flex flex-col" key={formEntry.name}>
                                     <label htmlFor={formEntry.name}
                                            className="form-label"
                                     >{formEntry.label}:</label>
-                                    <input onChange={(e) => handleChange(e)} type="file" alt={formEntry.label}
+                                    <input onChange={(e) => handleChange(e)}
+                                           type="file" accept="image/*"
+                                           alt={formEntry.label}
                                            name={formEntry.name} id={formEntry.name}
                                            className="form-file-input"
                                     ></input>
                                     {formEntryValues[formEntry.name] &&
                                         <div className="w-2/6 overflow-hidden mx-auto">
-                                            <img className="object-cover w-full h-full" alt={formEntry.label} src={formEntryValues[formEntry.name] as string}/>
+                                            <img className="object-cover w-full h-full" alt={formEntry.label}
+                                                 src={previewSrc}/>
                                         </div>}
                                 </div>
                             );
+                        }
                     }
                 })}
                 <button

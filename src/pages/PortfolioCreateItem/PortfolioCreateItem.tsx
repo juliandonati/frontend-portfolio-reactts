@@ -43,7 +43,7 @@ export function PortfolioCreateItem(): JSX.Element {
     const itemToSubmit = itemType == 'degrees' ? 'título académico' : (itemType == 'experience' ? 'trabajo' : 'habilidad');
     const formStructure: FormStructure = {
         formEntryList: [],
-        formId: itemType!,
+        formId: itemType == 'degrees' ? 'degree' : (itemType == 'experience' ? 'job' : 'skill'),
         formName: `${itemId ? 'Editar' : 'Documentar'} ${itemToSubmit}`,
         submitBtnText: `Guardar ${itemToSubmit}`
     };
