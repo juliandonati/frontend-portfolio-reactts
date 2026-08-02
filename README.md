@@ -1,21 +1,43 @@
-> [!NOTE]
-> Este es un proyecto de aprendizaje para aprender a utilizar React, utilizando la API que codifiqué anteriormente con Spring Boot en Java.
+# Frontend - Plataforma de Portafolios Web Multiusuario
 
-<h2>¿Cuáles son las funciones de la página?</h2>
-<p>Las funciones de la página son permitir que distintos usuarios, que puedan registrarse e iniciar sesión, publiquen su portafolio personal, y dicho portafolio contenga sus títulos académicos, experiencia laboral, habilidades y proyectos.</p>
+Este es el cliente web de la plataforma de portafolios, desarrollado con **React** y **TypeScript**. La aplicación se encarga de la interfaz de usuario, la navegación y el manejo de sesiones de forma segura, integrándose directamente con la API REST del backend.
 
+> 💻 **Backend API:** [Enlace al repositorio del Backend API en Java, Spring Boot](https://github.com/juliandonati/backend-portfolio)
 
-<h2>¿Qué herramientas utilicé para el proyecto?</h2>
-<h3>Para el BACKEND</h3>
-<ul> 
-  <li>Java, junto al Framework Spring Boot, y Maven para gestión de dependencias.</li> 
-  <li>JPA e Hibernate, para la especificación e implementación de consultas y repositorios, mapeo objeto-relacional (ORM) y la persistencia de datos</li>
-  <li>El uso de distintas librerías, como MapStruct para el mappeo de dominios a DTO's, o Swagger UI para una interfaz intuítiva y documentación de la API.</li>
-</ul>
-<h3>Para el FRONTEND</h3>
-<ul>
-  <li>TypeScript, con la librería React para simplificar la construcción de componentes individuales y su diseño.</li>
-  <li>La herramienta de desarrollo npm para la gestión de dependencias.</li>
-  <li>El empaquetador y servidor de desarrollo Vite</li>
-  <li>Librerías individuales, como react-cookie para el manejo de cookies en React (y para cumplir con el principio de 'Single Source of Truth')</li>
-</ul>
+## 🛠️ Tecnologías Principales
+
+- **[React](https://react.dev/):** Biblioteca para la construcción de interfaces de usuario dinámicas.
+- **[TypeScript](https://www.typescriptlang.org/):** Lenguaje para tipado estático, mejorando la mantenibilidad y escalabilidad.
+- **[Vite](https://vitejs.dev/):** Herramienta de compilación de próxima generación para un desarrollo extremadamente rápido.
+- **[React Router](https://reactrouter.com/):** Gestión declarativa de rutas y navegación.
+- **[React Cookie](https://www.npmjs.com/package/react-cookie):** Gestión de cookies para el manejo de sesiones y autenticación basada en tokens.
+
+## ⚙️ Requisitos Previos
+
+Asegúrate de tener instalados los siguientes componentes en tu sistema:
+
+- [Node.js](https://nodejs.org/) (v18.x o superior).
+- [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/).
+
+## 🚀 Instalación y Configuración
+
+1. **Clonar el repositorio:**
+
+   ```bash
+   git clone https://github.com/juliandonati/frontend-portfolio-reactts
+   cd frontend-portfolio-reactts
+
+2. **Instalar las dependencias**
+   ```bash
+   npm install
+
+3. **Configurar la conexión con el Backend:** La configuración de la API se encuentra centralizada en el archivo /src/services/apiConfig.ts. Asegúrate de actualizar la dirección IP según tu entorno de red local 
+   ```bash
+   // src/services/apiConfig.ts
+   const API_VERSION = 'v1';
+   export const API_BASE_URL = 'http://<tu dirección ip>:8080/api/' + API_VERSION;
+
+4. **Iniciar el entorno de desarrollo**
+   ```bash
+   npm run dev
+   
