@@ -44,11 +44,16 @@ function PortfolioSearchBar() {
     const resetTimeout : ResetTimeout = useDebounce(searchFor,searchDebounceTime);
 
     function searchFor(newSearchFilter : string): void{
-        if(newSearchFilter.trim() != '')
+        if(newSearchFilter.trim() != '') {
             getUserPageByName(newSearchFilter)
-                .then((userPage : PageResponse<User>) => setSearchResultList(userPage.content))
-        else
+                .then((userPage: PageResponse<User>) => setSearchResultList(userPage.content))
+            if(!startedSearching)
+                setStartedSearching(true);
+        }
+        else {
             setSearchResultList([]);
+            setStartedSearching(false)
+        }
     }
 
     return(
@@ -64,9 +69,6 @@ function PortfolioSearchBar() {
 
                 onChange={(e) => {
                 const newSearchFilter = e.currentTarget.value;
-
-                if(!startedSearching)
-                    setStartedSearching(true);
 
                 setSearchFilter(newSearchFilter);
                 resetTimeout(newSearchFilter);
