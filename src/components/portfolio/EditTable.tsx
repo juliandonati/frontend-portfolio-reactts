@@ -60,7 +60,7 @@ export function EditTable<T extends PortfolioItem>({
 
                                 return (
                                     <td>
-                                        {!isImageUrl ? (<p>valueAsString</p>) : (<img src={valueAsString}/>)}
+                                        {!isImageUrl ? (<p>{valueAsString}</p>) : (<img src={valueAsString} alt="Imagen"/>)}
                                     </td>);
                             }
                         )}
