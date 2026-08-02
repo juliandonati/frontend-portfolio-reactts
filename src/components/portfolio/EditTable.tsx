@@ -59,8 +59,8 @@ export function EditTable<T extends PortfolioItem>({
                                 const isImageUrl:boolean = valueAsString.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) != null || valueAsString.startsWith('blob:');
 
                                 return (
-                                    <td>
-                                        {!isImageUrl ? (<p>{valueAsString}</p>) : (<img src={valueAsString} alt="Imagen"/>)}
+                                    <td className="h-40">
+                                        {!isImageUrl ? (<p>{valueAsString}</p>) : (<img className="object-cover w-full h-full" src={valueAsString} alt="Imagen"/>)}
                                     </td>);
                             }
                         )}
