@@ -20,7 +20,7 @@ export function Degree({name, description, startDate, endDate, imgUrl}: DegreePr
         border-b-4 border-[rgba(0,0,0,.2)]
         overflow-hidden
 
-        relative lg:static
+        relative
         w-9/10 h-120 p-4 lg:w-5/6 lg:h-100 lg:p-0
         rounded-2xl lg:rounded-none lg:rounded-tl-[8rem]
         lg:grid lg:grid-cols-[2fr_1fr]
@@ -36,11 +36,11 @@ export function Degree({name, description, startDate, endDate, imgUrl}: DegreePr
                 <p className="text-3xl z-20">{description}</p>
             </div>
             <div className="
-            absolute top-0 left-0
+            absolute bottom-0 right-0
             overflow-hidden
             w-full h-full
             block
-            lg:static lg:h-80 lg:shadow lg:shadow-[rgba(0,0,0,.5)]
+            lg:h-80 lg:w-80 lg:rounded-tl-[8rem] lg:shadow lg:shadow-[rgba(0,0,0,.5)]
             ">
                 <div className="absolute top-0 left-0 w-full h-full bg-secundario opacity-75 z-10 lg:hidden"></div>
                 <img

@@ -30,11 +30,14 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
                 <p className="text-2xl">{description}</p>
             </div>
             <div className="
-            w-full content-end mx-auto overflow-hidden
+            mx-auto overflow-hidden
             bg-white
-            relative z-0">
+            w-full h-full
+            absolute top-1/2 -translate-y-1/2
+            z-2">
+                <div className="z-2 absolute w-full h-full bg-white opacity-50"></div>
                 <img
-                    className="object-cover"
+                    className="object-cover w-full h-full my-auto z-1"
                     alt={`Imagen de habilidad en ${name}`}
                     src={imgUrl ? imgUrl : "https://i.pinimg.com/736x/44/c2/e7/44c2e7a9afbacb46080ba1f0740d48a3.jpg"}/>
             </div>

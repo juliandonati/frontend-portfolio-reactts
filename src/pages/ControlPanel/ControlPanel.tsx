@@ -55,7 +55,7 @@ export default function ControlPanel(): JSX.Element | null {
                     }
                 </ul>
 
-                <h3 className="text-6xl underline decoration-pink-500">todo OPCIONES DE ADMIN</h3>
+                <h3 className="text-6xl underline decoration-pink-500 hidden">todo OPCIONES DE ADMIN</h3>
                 <ul className="admin-controlpanel-options">
 
                 </ul>
