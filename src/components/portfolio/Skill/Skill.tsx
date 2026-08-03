@@ -13,7 +13,7 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
     return(
         <li className="
         grid grid-rows-[3fr_2fr]
-        h-120 w-9/10 lg:w-80 mx-auto
+        h-120 w-9/10 lg:w-80 2xl:w-140 mx-auto
         rounded-4xl shadow-md shadow-black
         overflow-hidden
         relative
