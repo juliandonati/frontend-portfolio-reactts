@@ -27,7 +27,7 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
                 <h4 className="text-4xl">{name}</h4>
                 <strong className="text-3xl">Nivel: {level}</strong>
                 <strong className="text-3xl">Categoría: {category}</strong>
-                <p className="text-2xl">{description}</p>
+                <p className="text-2xl mt-6">{description}</p>
             </div>
             <div className="
             mx-auto overflow-hidden
