@@ -6,7 +6,7 @@ footer{
             transparent 90%
             ),
             url("../../../assets/sobrefootercompleto.png");
-    background-size: 166% 60%;
+    background-size: 133% 60%;
     background-position-y: 100%;
     background-repeat: repeat-x;
 
@@ -14,7 +14,7 @@ footer{
         background-size: 66% 100%;
     }
 
-    @media screen and (min-width: 00px){
+    @media screen and (min-width: 920px){
         background-size: 55% 100%;
     }
 }
