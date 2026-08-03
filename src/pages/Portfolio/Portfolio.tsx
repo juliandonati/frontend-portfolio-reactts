@@ -19,7 +19,7 @@ interface PortfolioResult {
 export function Portfolio(): JSX.Element {
     const [portfolioResult, setPortfolioResult] = useState<PortfolioResult>({error: undefined, portfolio: undefined});
     const {isErrorOpen, errorMessage, showError} = useErrorDialog();
-    const [isLoading,setIsLoading] = useState(false);
+    const [isLoading,setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     const {username, action} = useParams<string>();
