@@ -8,6 +8,7 @@ import ControlPanel from "./pages/ControlPanel/ControlPanel.tsx";
 import {Portfolio} from "./pages/Portfolio/Portfolio.tsx";
 import {PortfolioCreateItem} from "./pages/PortfolioCreateItem/PortfolioCreateItem.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
+import {ContactSite} from "./pages/ContactSite/ContactSite.tsx";
 
 export interface Token {
     tokenType: string;
@@ -37,6 +38,7 @@ export default function App() {
                     <Route path="/u/:username/:action" element={<Portfolio/>}/>
                     <Route path="/u/:username/create/:itemType" element={<PortfolioCreateItem/>}/>
                     <Route path="/:itemType/:itemId/edit" element={<PortfolioCreateItem/>}/>
+                    <Route path="/contact" element={<ContactSite/>}/>
                 </Routes>
             </main>
 
