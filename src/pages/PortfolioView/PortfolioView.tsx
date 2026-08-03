@@ -28,8 +28,9 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
             <div
                 className="portfolio-section grid grid-rows-[1fr_1fr_5fr_1fr] w-full
                         justify-items-center text-center
-                        h-120vh
-                        md:h-[80vh]">
+                        h-[120vh]
+                        md:h-[80vh]
+                        2xl:h-[60vh]">
                 <h3 className="portfolio-title">¡Hola, soy {presentation.name}!</h3>
                 <p className="text-4xl">{presentation.title}</p>
                 <div className="w-96 h-96 mx-auto overflow-hidden shadow-xl shadow-pink-500 rounded-full">
