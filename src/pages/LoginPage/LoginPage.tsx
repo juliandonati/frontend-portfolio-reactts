@@ -32,7 +32,7 @@ export default function LoginPage(): JSX.Element {
             <div className="
             grid-rows-[1fr_4fr]
             ">
-                <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
+                <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={()=>hideError()}/>
                 <GenericForm<Token> formStructure={loginFormStructure} formPath={'auth/login'} formMethod={'POST'} postFormFunc={setAccessToken}
                 postErrorCallback={()=>showError("Usuario o contraseña incorrectos")}/>
             </div>

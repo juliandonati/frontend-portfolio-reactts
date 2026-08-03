@@ -1,6 +1,7 @@
 import {type ChangeEvent, type JSX, useState} from "react";
 import {API_BASE_URL} from "../../services/apiConfig.ts";
 import type {Token} from "../../App.tsx";
+import {LoadingCover} from "../layout/Miscellaneous/LoadingCover.tsx";
 
 export interface FormEntry {
     name: string;
@@ -67,9 +68,12 @@ export default function GenericForm<T>({
     );
     const [imagePreviews, setImagePreviews] = useState<Record<string, string>>({});
 
+    const [submitting, setSubmitting] = useState(false);
+
 
     function submitForm(e: React.SubmitEvent<HTMLElement>) {
         e.preventDefault();
+        setSubmitting(true);
 
         let formDataEntryValuesString: string = '{';
         let formDataImageFile: File | undefined = undefined;
@@ -119,6 +123,7 @@ export default function GenericForm<T>({
             body: isDataMultipart ? formData : formDataEntryValuesString
         })
             .then((response) => {
+                    setSubmitting(false);
                     if (response.ok) {
                         const contentType = response.headers.get("content-type");
                         if (contentType?.includes("application/json"))
@@ -129,12 +134,11 @@ export default function GenericForm<T>({
                                 });
                         else
                             response.text()
-                                .then((responseText)=>{
+                                .then((responseText) => {
                                     if (postFormFunc != undefined)
                                         postFormFunc(responseText as unknown as T);
                                 })
-                    }
-                    else
+                    } else
                         postErrorCallback(response.statusText);
                 }
             )
@@ -169,81 +173,86 @@ export default function GenericForm<T>({
     // console.log(`Metodo de ${formStructure.formId}: ${formMethod}`);
 
     return (
-        <div className="flex flex-col items-center w-2/3 lg:w-200 mx-auto text-center">
+        <>
+            <div className="absolute left-0">
+                <LoadingCover loading={submitting}/>
+            </div>
+            <div className="flex flex-col items-center w-2/3 lg:w-200 mx-auto text-center">
 
-            <h3 className="text-6xl">{formStructure.formName}</h3>
+                <h3 className="text-6xl">{formStructure.formName}</h3>
 
-            <form id={formStructure.formId}
-                  encType="multipart/form-data"
-                  onSubmit={(e) => submitForm(e)}
-                  className="flex flex-col w-full items-center gap-4 py-10"
-            >
-                {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element | undefined => {
-                    switch (formEntry.dataType) {
-                        case "string":
-                            return (
-                                <div className="form-entry" id={`${formEntry.name}Div`} key={formEntry.name}>
-                                    <label htmlFor={formEntry.name}
-                                           className="form-label"
-                                    >{formEntry.label}:</label>
-                                    <input onChange={(e) => handleChange(e)} type="text" name={formEntry.name}
-                                           id={formEntry.name} value={formEntryValues[formEntry.name] as string}
-                                           className="form-input"
-                                    ></input>
-                                </div>
-                            );
-                        case "password":
-                            return (
-                                <div className="form-entry" key={formEntry.name}>
-                                    <label htmlFor={formEntry.name}
-                                           className="form-label"
-                                    >{formEntry.label}:</label>
-                                    <input onChange={(e) => handleChange(e)} type="password" name={formEntry.name}
-                                           id={formEntry.name} value={formEntryValues[formEntry.name] as string}
-                                           className="form-input"
-                                    ></input>
-                                </div>
-                            );
-                        case "date":
-                            return (
-                                <div className="form-entry" key={formEntry.name}>
-                                    <label htmlFor={formEntry.name}
-                                           className="form-label"
-                                    >{formEntry.label}:</label>
-                                    <input onChange={(e) => handleChange(e)} type="date" name={formEntry.name}
-                                           id={formEntry.name} value={formEntryValues[formEntry.name]?.toString()}
-                                           className="form-input"
-                                    ></input>
-                                </div>
-                            );
-                        case "image": {
-                            const previewSrc = imagePreviews[formEntry.name] || (typeof formEntryValues[formEntry.name] === 'string' ? formEntryValues[formEntry.name] as string : undefined);
-                            return (
-                                <div className="form-entry flex flex-col" key={formEntry.name}>
-                                    <label htmlFor={formEntry.name}
-                                           className="form-label"
-                                    >{formEntry.label}:</label>
-                                    <input onChange={(e) => handleChange(e)}
-                                           type="file" accept="image/*"
-                                           alt={formEntry.label}
-                                           name={formEntry.name} id={formEntry.name}
-                                           className="form-file-input"
-                                    ></input>
-                                    {formEntryValues[formEntry.name] &&
-                                        <div className="w-2/6 overflow-hidden mx-auto">
-                                            <img className="object-cover w-full h-full" alt={formEntry.label}
-                                                 src={previewSrc}/>
-                                        </div>}
-                                </div>
-                            );
+                <form id={formStructure.formId}
+                      encType="multipart/form-data"
+                      onSubmit={(e) => submitForm(e)}
+                      className="flex flex-col w-full items-center gap-4 py-10"
+                >
+                    {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element | undefined => {
+                        switch (formEntry.dataType) {
+                            case "string":
+                                return (
+                                    <div className="form-entry" id={`${formEntry.name}Div`} key={formEntry.name}>
+                                        <label htmlFor={formEntry.name}
+                                               className="form-label"
+                                        >{formEntry.label}:</label>
+                                        <input onChange={(e) => handleChange(e)} type="text" name={formEntry.name}
+                                               id={formEntry.name} value={formEntryValues[formEntry.name] as string}
+                                               className="form-input"
+                                        ></input>
+                                    </div>
+                                );
+                            case "password":
+                                return (
+                                    <div className="form-entry" key={formEntry.name}>
+                                        <label htmlFor={formEntry.name}
+                                               className="form-label"
+                                        >{formEntry.label}:</label>
+                                        <input onChange={(e) => handleChange(e)} type="password" name={formEntry.name}
+                                               id={formEntry.name} value={formEntryValues[formEntry.name] as string}
+                                               className="form-input"
+                                        ></input>
+                                    </div>
+                                );
+                            case "date":
+                                return (
+                                    <div className="form-entry" key={formEntry.name}>
+                                        <label htmlFor={formEntry.name}
+                                               className="form-label"
+                                        >{formEntry.label}:</label>
+                                        <input onChange={(e) => handleChange(e)} type="date" name={formEntry.name}
+                                               id={formEntry.name} value={formEntryValues[formEntry.name]?.toString()}
+                                               className="form-input"
+                                        ></input>
+                                    </div>
+                                );
+                            case "image": {
+                                const previewSrc = imagePreviews[formEntry.name] || (typeof formEntryValues[formEntry.name] === 'string' ? formEntryValues[formEntry.name] as string : undefined);
+                                return (
+                                    <div className="form-entry flex flex-col" key={formEntry.name}>
+                                        <label htmlFor={formEntry.name}
+                                               className="form-label"
+                                        >{formEntry.label}:</label>
+                                        <input onChange={(e) => handleChange(e)}
+                                               type="file" accept="image/*"
+                                               alt={formEntry.label}
+                                               name={formEntry.name} id={formEntry.name}
+                                               className="form-file-input"
+                                        ></input>
+                                        {formEntryValues[formEntry.name] &&
+                                            <div className="w-2/6 overflow-hidden mx-auto">
+                                                <img className="object-cover w-full h-full" alt={formEntry.label}
+                                                     src={previewSrc}/>
+                                            </div>}
+                                    </div>
+                                );
+                            }
                         }
-                    }
-                })}
-                <button
-                    className="btn-primario"
-                    type="submit">{formStructure.submitBtnText}</button>
-            </form>
-        </div>
+                    })}
+                    <button
+                        className="btn-primario"
+                        type="submit">{formStructure.submitBtnText}</button>
+                </form>
+            </div>
+        </>
     );
 }
 
