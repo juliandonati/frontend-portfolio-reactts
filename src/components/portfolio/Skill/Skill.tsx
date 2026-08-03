@@ -22,7 +22,7 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
             grid grid_rows-[1fr_1fr_1fr_3fr] p-8
             bg-card
             relative
-            z-10 shadow shadow-black
+            z-10
             ">
                 <h4 className="text-4xl">{name}</h4>
                 <strong className="text-3xl">Nivel: {level}</strong>
@@ -35,7 +35,7 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
             w-full h-full
             absolute top-1/2 -translate-y-1/2
             z-2">
-                <div className="z-2 absolute w-full h-full bg-white opacity-50"></div>
+                <div className="z-2 absolute w-full h-full bg-white opacity-75"></div>
                 <img
                     className="object-cover w-full h-full my-auto z-1"
                     alt={`Imagen de habilidad en ${name}`}
