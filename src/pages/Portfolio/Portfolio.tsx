@@ -8,6 +8,7 @@ import {PortfolioView} from "../PortfolioView/PortfolioView.tsx";
 import {PortfolioEdit} from "../PortfolioEdit/PortfolioEdit.tsx";
 import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
 import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
+import {LoadingCover} from "../../components/layout/Miscellaneous/LoadingCover.tsx";
 
 
 interface PortfolioResult {
@@ -46,7 +47,7 @@ export function Portfolio(): JSX.Element {
         return (
             <>
                 <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={() => navigate("/")}/>
-                <p>Cargando portafolio...</p>
+                <LoadingCover/>
             </>
         );
     }

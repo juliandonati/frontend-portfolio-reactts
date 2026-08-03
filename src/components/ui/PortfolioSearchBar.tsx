@@ -46,13 +46,15 @@ function PortfolioSearchBar() {
     function searchFor(newSearchFilter : string): void{
         if(newSearchFilter.trim() != '') {
             getUserPageByName(newSearchFilter)
-                .then((userPage: PageResponse<User>) => setSearchResultList(userPage.content))
-            if(!startedSearching)
-                setStartedSearching(true);
+                .then((userPage: PageResponse<User>) => {
+                    setSearchResultList(userPage.content);
+                    if(!startedSearching)
+                        setStartedSearching(true);
+                });
         }
         else {
             setSearchResultList([]);
-            setStartedSearching(false)
+            setStartedSearching(false);
         }
     }
 
