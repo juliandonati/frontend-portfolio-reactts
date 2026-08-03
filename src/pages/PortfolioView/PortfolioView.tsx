@@ -6,6 +6,7 @@ import {Degree} from "../../components/portfolio/Degree/Degree.tsx";
 import {Job} from "../../components/portfolio/Job/Job.tsx";
 import {Skill} from "../../components/portfolio/Skill/Skill.tsx";
 
+
 interface PortfolioViewProps {
     portfolio: Portfolio,
     username: string
@@ -32,7 +33,7 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                 <h3 className="portfolio-title">¡Hola, soy {presentation.name}!</h3>
                 <p className="text-4xl">{presentation.title}</p>
                 <div className="w-96 h-96 mx-auto overflow-hidden shadow-xl shadow-pink-500 rounded-full">
-                    <img alt={`Imagen de ${presentation.name}`} src={presentation.imgUrl}
+                    <img alt={`Imagen de ${presentation.name}`} src={presentation.imgUrl ? presentation.imgUrl : "/default_pfp.jpg"}
                          className="object-cover"/>
                 </div>
                 <p className="portfolio-desc">{presentation.description}</p>
