@@ -54,12 +54,12 @@ export function EditTable<T extends PortfolioItem>({
                 {data.map((item:T) =>
                     <tr>
                         {Object.values(item as Record<string, unknown>).map((value) => {
-                                const valueAsString = typeof value === 'string' ? value : String(value);
+                                const valueAsString = value ? (typeof value === 'string' ? value : String(value)) : 'N/A';
 
                                 const isImageUrl:boolean = valueAsString.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) != null || valueAsString.startsWith('blob:');
 
                                 return (
-                                    <td className="h-40">
+                                    <td className="h-40 text-center">
                                         {!isImageUrl ? (<p>{valueAsString}</p>) : (<img className="object-cover w-full h-full" src={valueAsString} alt="Imagen"/>)}
                                     </td>);
                             }

@@ -57,7 +57,7 @@ export default function GenericForm<T>({
                             acumulador[formEntry.name] = undefined;
                             break;
                         case "date":
-                            acumulador[formEntry.name] = formatDate(new Date());
+                            acumulador[formEntry.name] = null;
                             break;
                     }
 
