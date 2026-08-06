@@ -29,7 +29,7 @@ export default function RegisterPage() {
             <SuccessDialog isSuccessOpen={isSuccessOpen} successMessage={successMessage} onClose={()=>navigate("/login")}/>
             <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={()=>hideError()}/>
             <GenericForm formStructure={registerFormStructure} formPath={"auth/register"} formMethod={'POST'}
-                         postErrorCallback={()=>showError("Credenciales incorrectas o en uso")} // todo Validar campos individualmente
+                         postErrorCallback={showError} // todo Validar campos individualmente
                          postFormFunc={()=>showSuccess("¡Usuario registrado con éxito! Proceda a iniciar sesión")}
             />
         </>

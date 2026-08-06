@@ -66,6 +66,12 @@ export default function GenericForm<T>({
                 , {} as Record<string, entryValueType>) :
             currentFormData
     );
+    const [formEntryErrors, setFormEntryErrors] = useState<Record<string, string>>(
+        formStructure.formEntryList.reduce((acumulador, formEntry) => {
+            acumulador[formEntry.name]='';
+            return acumulador;
+        }, {} as Record<string, string>)
+    );
     const [imagePreviews, setImagePreviews] = useState<Record<string, string>>({});
 
     const [submitting, setSubmitting] = useState(false);
@@ -123,10 +129,11 @@ export default function GenericForm<T>({
             body: isDataMultipart ? formData : formDataEntryValuesString
         })
             .then((response) => {
+                    const contentType = response.headers.get("content-type");
                     setSubmitting(false);
                     if (response.ok) {
-                        const contentType = response.headers.get("content-type");
-                        if (contentType?.includes("application/json"))
+                        setFormEntryErrors({} as Record<string, string>);
+                        if (contentType && contentType.includes("application/json"))
                             response.json()
                                 .then((responseJson) => {
                                     if (postFormFunc != undefined)
@@ -138,7 +145,16 @@ export default function GenericForm<T>({
                                     if (postFormFunc != undefined)
                                         postFormFunc(responseText as unknown as T);
                                 })
-                    } else
+                    } else if (contentType && contentType.includes("application/json"))
+                        response.json()
+                            .then((responseJson) => {
+                                // Si el error devuelve JSON, generalmente se trata de errores en el formulario.
+                                if (responseJson.errores) // Si se trata de errores de validación, se indican.
+                                    setFormEntryErrors(responseJson.errores);
+                                else
+                                    postErrorCallback(responseJson.error ? responseJson.error : "Error desconocido");
+                            });
+                    else
                         postErrorCallback(response.statusText);
                 }
             )
@@ -198,6 +214,7 @@ export default function GenericForm<T>({
                                                id={formEntry.name} value={formEntryValues[formEntry.name] as string}
                                                className="form-input"
                                         ></input>
+                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             case "password":
@@ -210,6 +227,7 @@ export default function GenericForm<T>({
                                                id={formEntry.name} value={formEntryValues[formEntry.name] as string}
                                                className="form-input"
                                         ></input>
+                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             case "date":
@@ -222,6 +240,7 @@ export default function GenericForm<T>({
                                                id={formEntry.name} value={formEntryValues[formEntry.name]?.toString()}
                                                className="form-input"
                                         ></input>
+                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             case "image": {
@@ -242,6 +261,7 @@ export default function GenericForm<T>({
                                                 <img className="object-cover w-full h-full" alt={formEntry.label}
                                                      src={previewSrc}/>
                                             </div>}
+                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             }
