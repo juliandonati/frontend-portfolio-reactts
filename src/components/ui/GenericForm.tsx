@@ -246,10 +246,10 @@ export default function GenericForm<T>({
                             case "image": {
                                 const previewSrc = imagePreviews[formEntry.name] || (typeof formEntryValues[formEntry.name] === 'string' ? formEntryValues[formEntry.name] as string : undefined);
                                 return (
-                                    <div className="form-entry flex flex-col" key={formEntry.name}>
+                                    <div className="form-file-entry" key={formEntry.name}>
                                         <label htmlFor={formEntry.name}
-                                               className="form-label"
-                                        >{formEntry.label}:</label>
+                                               className="form-label justify-self-center underline"
+                                        >{formEntry.label}</label>
                                         <input onChange={(e) => handleChange(e)}
                                                type="file" accept="image/*"
                                                alt={formEntry.label}

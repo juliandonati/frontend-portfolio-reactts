@@ -64,7 +64,11 @@
 
     /* GenericForm */
     .form-entry {
-        @apply grid grid-cols-2 gap-4 items-center w-full max-w-200
+        @apply grid grid-cols-2 gap-4 items-center w-full max-w-200 text-2xl 2xl:text-4xl
+    }
+
+    .form-file-entry{
+        @apply grid grid-rows-[1fr_1fr_5fr] w-full
     }
 
     .form-label{
@@ -72,12 +76,22 @@
     }
 
     .form-input{
-        @apply h-8 w-full max-w-88 text-2xl border border-gray-300 rounded-lg p-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500
+        @apply h-8 w-full max-w-88 border border-gray-300 rounded-lg p-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500
+        2xl:h-16
     }
 
     .form-file-input{
-        @apply file:bg-btn-secundario file:text-secundario font-sans file:border-2 file:border-secundario file:w-30 file:h-10
-        hover:file:bg-secundario hover:file:border-btn-secundario hover:file:text-btn-secundario
+        @apply file:bg-btn-secundario file:text-secundario font-sans file:border-2 file:border-secundario
+        hover:file:bg-secundario hover:file:border-btn-secundario hover:file:text-btn-secundario text-2xl
+
+        file:w-30 file:h-10
+        w-fit mx-auto my-2
+
+        lg:file:w-40
+    }
+
+    .form-error{
+        @apply text-red-600 col-span-2 justify-self-center
     }
 
     /* PortfolioView */

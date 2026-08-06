@@ -1,5 +1,5 @@
 import {type JSX, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {decodeToken} from "react-jwt";
 import {useCookies} from "react-cookie";
 import {createPortfolioByName, existsPortfolioByName} from "../../services/portfolioService.ts";
@@ -37,9 +37,11 @@ export default function ControlPanel(): JSX.Element | null {
                     {
                         hasPortfolio ? (
                                 <>
-                                    <li className="btn-primario" onClick={() => navigate(`/u/${username}/view`)}>VER PORTAFOLIO</li>
+                                    <li className="btn-primario">
+                                        <Link to={`/u/${username}/view`}>VER PORTAFOLIO</Link>
+                                    </li>
                                     <li className="btn-secundario">
-                                        <a href={`/u/${username}/edit`} target='_blank' rel="noopener noreferrer">EDITAR PORTAFOLIO</a>
+                                        <Link to={`/u/${username}/edit`} target="_blank">EDITAR PORTAFOLIO</Link>
                                     </li>
                                 </>
                             ) :
