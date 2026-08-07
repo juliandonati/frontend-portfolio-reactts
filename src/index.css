@@ -18,14 +18,14 @@
 
 @layer components { /* Luego puedo dividirlo en varios .css, y utilizar import acá, en el index.css */
     .btn-primario {
-        @apply h-18 w-auto
+        @apply block h-18 w-auto
         text-3xl content-center font-boton lg:p-4 bg-btn-principal text-secundario shadow-xl shadow-secundario rounded-full
         transition duration-300 ease-in-out
         hover:bg-secundario hover:text-btn-principal hover:shadow-btn-principal cursor-pointer select-none
     }
 
     .btn-secundario {
-        @apply h-18 w-auto
+        @apply block h-18 w-auto
         text-3xl content-center font-boton p-4 bg-btn-secundario text-secundario shadow-xl shadow-secundario rounded-full
         transition duration-300 ease-in-out
         hover:bg-secundario hover:text-btn-secundario hover:shadow-btn-secundario cursor-pointer select-none
