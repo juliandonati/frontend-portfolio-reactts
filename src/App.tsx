@@ -27,7 +27,7 @@ export default function App() {
             flex flex-col flex-1 items-center content-center
             font-display
            
-            w-screen h-full mt-24
+            w-screen h-full mt-24 overflow-x-hidden
             `}>
                 <Routes>
                     <Route path="/" element={<LandingSite/>}/>

@@ -30,7 +30,7 @@ export default function LoginPage(): JSX.Element {
 
         return (
             <div className="
-            grid-rows-[1fr_4fr]
+            grid-rows-[1fr_4fr] mt-12
             ">
                 <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={()=>hideError()}/>
                 <GenericForm<Token> formStructure={loginFormStructure} formPath={'auth/login'} formMethod={'POST'} postFormFunc={setAccessToken}

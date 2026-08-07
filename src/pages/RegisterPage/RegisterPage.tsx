@@ -25,13 +25,13 @@ export default function RegisterPage() {
     }
 
     return (
-        <>
+        <div className="mt-12">
             <SuccessDialog isSuccessOpen={isSuccessOpen} successMessage={successMessage} onClose={()=>navigate("/login")}/>
             <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={()=>hideError()}/>
             <GenericForm formStructure={registerFormStructure} formPath={"auth/register"} formMethod={'POST'}
                          postErrorCallback={showError} // todo Validar campos individualmente
                          postFormFunc={()=>showSuccess("¡Usuario registrado con éxito! Proceda a iniciar sesión")}
             />
-        </>
+        </div>
     );
 }

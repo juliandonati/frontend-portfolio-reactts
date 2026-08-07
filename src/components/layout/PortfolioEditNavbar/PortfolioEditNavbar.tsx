@@ -7,7 +7,7 @@ interface PortfolioEditNavbarProps{
 export function PortfolioEditNavbar({username}:PortfolioEditNavbarProps){
     return (
         <nav className="
-        w-screen z-20 bg-white shadow-xs shadow-black
+        w-full z-20 bg-white shadow-xs shadow-black
         h-100
         md:h-16">
             <ul className="
