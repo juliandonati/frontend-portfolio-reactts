@@ -7,7 +7,7 @@ import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
 import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
 import {LoadingCover} from "../../components/layout/Miscellaneous/LoadingCover.tsx";
 
-interface CustomJwtPayload {
+export interface CustomJwtPayload {
     sub: string,
     iat: number,
     exp: number
@@ -43,17 +43,19 @@ export default function ControlPanel(): JSX.Element | null {
                 <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
                 {
                     !isLoading &&
-                    <div className="grid grid-rows-[1fr_2fr_1fr_2fr] gap-4 w-5/6 md:w-auto text-center">
-                        <h3 className="text-6xl underline my-auto decoration-pink-500">OPCIONES DE USUARIO</h3>
-                        <ul className="grid grid-rows-2 lg:gap-4 m-4 text-center mx-auto">
+                    <div className="grid grid-rows-[1fr_2fr_1fr_2fr] py-16 gap-4 w-5/6 text-center">
+                        <h3 className="text-6xl underline my-auto decoration-pink-500 2xl:text-8xl">OPCIONES DE USUARIO</h3>
+                        <ul className="
+                        grid grid-rows-2 gap-4 m-4 text-center mx-auto
+                        2xl:w-1/5 ">
                             {
                                 hasPortfolio ? (
                                         <>
                                             <li>
-                                                <Link className="btn-primario" to={`/u/${username}/view`}>VER PORTAFOLIO</Link>
+                                                <Link className="btn-primario 2xl:text-4xl" to={`/u/${username}/view`}>VER PORTAFOLIO</Link>
                                             </li>
                                             <li>
-                                                <Link className="btn-secundario" to={`/u/${username}/edit`} target="_blank">EDITAR PORTAFOLIO</Link>
+                                                <Link className="btn-secundario 2xl:text-4xl" to={`/u/${username}/edit/presentation`} target="_blank">EDITAR PORTAFOLIO</Link>
                                             </li>
                                         </>
                                     ) :
@@ -61,7 +63,7 @@ export default function ControlPanel(): JSX.Element | null {
                                         <li className="btn-primario"
                                             onClick={() => {
                                                 createPortfolioByName(username, cookies.accessToken)
-                                                    .then(() => navigate(`/u/${username}/edit`))
+                                                    .then(() => navigate(`/u/${username}/edit/presentation`))
                                                     .catch((error: Error) => showError(error.message));
                                             }}>CREAR PORTAFOLIO</li>
                                     )

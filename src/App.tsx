@@ -9,6 +9,7 @@ import {Portfolio} from "./pages/Portfolio/Portfolio.tsx";
 import {PortfolioCreateItem} from "./pages/PortfolioCreateItem/PortfolioCreateItem.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import {ContactSite} from "./pages/ContactSite/ContactSite.tsx";
+import {PortfolioEdit} from "./pages/PortfolioEdit/PortfolioEdit.tsx";
 
 export interface Token {
     tokenType: string;
@@ -25,19 +26,19 @@ export default function App() {
             <main className={`
             flex flex-col flex-1 items-center content-center
             font-display
-            
-            w-screen h-full
-            
-            relative top-40
+           
+            w-screen h-full mt-24
             `}>
                 <Routes>
                     <Route path="/" element={<LandingSite/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/control-panel" element={<ControlPanel/>}/>
-                    <Route path="/u/:username/:action" element={<Portfolio/>}/>
+                    <Route path="/u/:username/view" element={<Portfolio/>}/>
                     <Route path="/u/:username/create/:itemType" element={<PortfolioCreateItem/>}/>
-                    <Route path="/:itemType/:itemId/edit" element={<PortfolioCreateItem/>}/>
+                    <Route path="/u/:username/edit/:itemType" element={<PortfolioEdit/>}/>
+                    <Route path="/u/:username/edit" element={<PortfolioEdit/>}/>
+                    <Route path="/item/:itemType/:itemId/edit" element={<PortfolioCreateItem/>}/>
                     <Route path="/contact" element={<ContactSite/>}/>
                 </Routes>
             </main>

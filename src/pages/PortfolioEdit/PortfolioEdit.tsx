@@ -1,134 +1,145 @@
-import type {JSX} from "react";
-import type {Degree, Job, Portfolio, Skill} from "../../types/Portfolio.ts";
-import GenericForm, {type entryValueType, type FormStructure} from "../../components/ui/GenericForm.tsx";
+import {type JSX, Suspense, useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
-import type {Token} from "../../App.tsx";
 import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
 import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
-import {useNavigate} from "react-router-dom";
-import {EditTable} from "../../components/portfolio/EditTable.tsx";
-import LandingSite from "../LandingSite/LandingSite.tsx";
+import {useParams} from "react-router-dom";
 import {useSuccessDialog} from "../../hooks/useSuccessDialog.ts";
 import {SuccessDialog} from "../../components/layout/Miscellaneous/SuccessDialog.tsx";
+import {PortfolioEditNavbar} from "../../components/layout/PortfolioEditNavbar/PortfolioEditNavbar.tsx";
+import {LoadingCover} from "../../components/layout/Miscellaneous/LoadingCover.tsx";
+import {
+    COMPONENT_NOT_FOUND_MESSAGE,
+    PortfolioAboutMeService, type PortfolioComponent,
+    type PortfolioComponentService, PortfolioDegreeListService,
+    PortfolioExperienceListService, PortfolioPresentationService,
+    PortfolioSkillListService
+} from "../../services/portfolioComponentService.ts";
+import * as React from "react";
+import {decodeToken} from "react-jwt";
+import type {CustomJwtPayload} from "../ControlPanel/ControlPanel.tsx";
 
-interface PortfolioEditProps {
-    portfolio: Portfolio,
-    username: string
+// Para la carga del item a editar
+interface PortfolioComponentResult {
+    error?: Error;
+    component?: PortfolioComponent;
 }
 
-const presentationFormStructure: FormStructure = {
-    formEntryList: [
-        {name: 'name', label: 'Nombre profesional', dataType: 'string'},
-        {name: 'title', label: 'Título profesional', dataType: 'string'},
-        {name: 'description', label: 'Mi descripción', dataType: 'string'},
-        {name: 'img-file', label: 'Mi imagen', dataType: 'image'}
-    ],
-    formId: 'presentation',
-    formName: 'Editar mi presentación',
-    submitBtnText: 'Guardar presentación'
+// Para la carga de componentes de React según el componente:
+export interface EditSectionProps {
+    portfolioComponent?: PortfolioComponent;
+    showError: (message: string) => void;
+    username?: string;
+    showSuccess?: (message: string) => void;
 }
 
-const aboutmeFormStructure: FormStructure = {
-    formEntryList: [
-        {name: 'title', label: 'Título', dataType: 'string'},
-        {name: 'description', label: 'Descripción de lo que hago', dataType: 'string'},
-        /* todo No agregué la imagen aún porque no la implementé en el Backend */
-        {name: 'buttonText', label: 'Botón', dataType: 'string'},
-        {name: 'buttonUrl', label: 'URL Botón', dataType: 'string'}
-    ],
-    formId: 'about-me',
-    formName: 'Editar mi About-Me',
-    submitBtnText: 'Guardar About-Me'
-}
+// Code-Splitting
+const SkillEditSection = React.lazy(() => import('../../components/portfolioEdit/SkillEditSection/SkillEditSection'));
+const DegreeEditSection = React.lazy(() => import('../../components/portfolioEdit/DegreeEditSection/DegreeEditSection'));
+const ExperienceEditSection = React.lazy(() => import('../../components/portfolioEdit/ExperienceEditSection/ExperienceEditSection'));
+const PresentationEditSection = React.lazy(() => import('../../components/portfolioEdit/PresentationEditSection/PresentationEditSection'));
+const AboutMeEditSection = React.lazy(() => import('../../components/portfolioEdit/AboutMeEditSection/AboutMeEditSection'));
 
+// Mapa de componentes
+const SECTION_COMPONENTS: Record<string, React.ComponentType<EditSectionProps>> = {
+    'skills': SkillEditSection,
+    'degrees': DegreeEditSection,
+    'experience': ExperienceEditSection,
+    'presentation': PresentationEditSection,
+    'about-me': AboutMeEditSection
+};
 
-export function PortfolioEdit({portfolio, username}: PortfolioEditProps): JSX.Element {
-    const [cookies,,] = useCookies(['accessToken']);
-    const navigate = useNavigate();
+export function PortfolioEdit(): JSX.Element {
+    const [cookies, ,] = useCookies(['accessToken']);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const {isErrorOpen, errorMessage, showError, hideError} = useErrorDialog();
     const {isSuccessOpen, successMessage, showSuccess} = useSuccessDialog();
+    const {username, itemType} = useParams<string>();
+    const [componentResult, setComponentResult] = useState<PortfolioComponentResult>({
+        error: undefined,
+        component: undefined
+    }); // se busca componente y se carga
 
-    if (cookies.accessToken) {
-        const jwt: Token = {
-            tokenType: "Bearer",
-            accessToken: cookies.accessToken
-        };
+    const DynamicSection = SECTION_COMPONENTS[itemType ? itemType : 'presentation'];
+    const isUserOwner: boolean = Boolean(username && cookies.accessToken && username == decodeToken<CustomJwtPayload>(cookies.accessToken)?.sub);
 
-        let presentation;
-        if (portfolio.presentation) {
-            const {id:_, ...presentationWithoutId} = portfolio.presentation;
-            presentation = presentationWithoutId;
-        }
+    useEffect(() => {
+        const fetchPortfolioData = async () => {
+            if (isUserOwner) {
+                if (!DynamicSection) {
+                    showError(`El componente ${itemType} no existe`);
+                    setIsLoading(false);
+                    return;
+                }
+                setIsLoading(true);
+                let portfolioComponentService: PortfolioComponentService<PortfolioComponent>;
+                const activeItemType = itemType ? itemType : 'presentation';
+                console.log("Ruta actual:", {itemType, activeItemType});
+                switch (activeItemType) {
+                    case 'skills':
+                        portfolioComponentService = new PortfolioSkillListService(username!, cookies.accessToken);
+                        break;
+                    case 'experience':
+                        portfolioComponentService = new PortfolioExperienceListService(username!, cookies.accessToken);
+                        break;
+                    case 'degrees':
+                        portfolioComponentService = new PortfolioDegreeListService(username!, cookies.accessToken);
+                        break;
+                    case 'about-me':
+                        portfolioComponentService = new PortfolioAboutMeService(username!, cookies.accessToken);
+                        break;
+                    case 'presentation':
+                        portfolioComponentService = new PortfolioPresentationService(username!, cookies.accessToken);
+                        break;
+                    default:
+                        return;
+                }
 
-        let aboutMe;
-        if (portfolio.aboutMe) {
-            const {id:_, ...aboutMeWithoutId} = portfolio.aboutMe;
-            aboutMe = aboutMeWithoutId;
-        }
 
-        const degrees = portfolio.degrees;
-        const jobs = portfolio.experience;
-        const skills = portfolio.skills;
-
-        return (
-            <div className="flex flex-col gap-8 w-full lg:w-5/6">
-                <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
-                <SuccessDialog isSuccessOpen={isSuccessOpen} successMessage={successMessage} onClose={() => location.reload()}/>
-
-                <div className="portfolio-edit-section">
-                    <GenericForm formStructure={presentationFormStructure} formPath={`presentation/${username}`}
-                                 formMethod={presentation ? 'PUT' : 'POST'} token={jwt}
-                                 currentFormData={presentation ? {'name':presentation.name,'title':presentation.title,'description':presentation.description,'img-file':presentation.imgUrl} : {} as Record<string, entryValueType>}
-                                 postFormFunc={() => showSuccess('¡Presentación guardada con éxito!')}
-                                 postErrorCallback={showError}
-                    />
-                </div>
-
-                <div className="portfolio-edit-section">
-                    <GenericForm formStructure={aboutmeFormStructure} formPath={`about-me/${username}`}
-                                 formMethod={aboutMe ? 'PUT' : 'POST'} token={jwt}
-                                 currentFormData={aboutMe as Record<string, entryValueType>}
-                                 postFormFunc={() => showSuccess('¡About-me guardado con éxito!')}
-                                 postErrorCallback={showError}
-                    />
-                </div>
-
-                <div className="portfolio-edit-section">
-                    <h3 className="portfolio-title">Mis títulos académicos</h3>
-                    {degrees.length > 0 ?
-                        <EditTable<Degree> tableHeaders={['ID','NOMBRE','DESC','INICIO','FIN','IMAGEN']} data={degrees} itemName={'degrees'} showErrorCallback={showError}/>
-                    : <p className="mx-auto text-3xl">No has subido ningún título académico</p> }
-                    <button
-                        onClick={()=>navigate(`/u/${username}/create/degrees`)}
-                        className="btn-primario mx-auto">DOCUMENTAR TÍTULO ACADÉMICO
-                    </button>
-                </div>
-
-                <div className="portfolio-edit-section">
-                    <h3 className="portfolio-title">Mi experiencia laboral</h3>
-                    {jobs.length > 0 ?
-                        <EditTable<Job> tableHeaders={['ID','EMPRESA','CARGO','DESC','INICIO','FIN']} data={jobs} itemName={'experience'} showErrorCallback={showError}/>
-                    : <p className="mx-auto text-3xl">No has subido ningún trabajo</p>}
-                    <button
-                        onClick={()=>navigate(`/u/${username}/create/experience`)}
-                        className="btn-primario mx-auto">DOCUMENTAR TRABAJO
-                    </button>
-                </div>
-
-                <div className="portfolio-edit-section">
-                    <h3 className="portfolio-title">Mis habilidades</h3>
-                    {skills.length > 0 ?
-                        <EditTable<Skill> tableHeaders={['ID','NOMBRE','DESC','NIVEL','IMAGEN','CATEGORIA']} data={skills} itemName={'skills'} showErrorCallback={showError}/>
-                        : <p className="mx-auto text-3xl">No has subido ninguna habilidad</p>
+                try {
+                    const portfolioComponent = await portfolioComponentService.get();
+                    setComponentResult({error: undefined, component: portfolioComponent});
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        if (error.message.includes(COMPONENT_NOT_FOUND_MESSAGE))
+                            setComponentResult({error: undefined, component: undefined});
+                        else {
+                            setComponentResult({error: error, component: undefined});
+                            showError(error.message);
+                        }
+                    } else {
+                        setComponentResult({error: new Error("Error desconocido"), component: undefined});
+                        showError("Ocurrió un error inesperado");
                     }
-                    <button
-                        onClick={()=>navigate(`/u/${username}/create/skills`)}
-                        className="btn-primario mx-auto">DOCUMENTAR HABILIDAD
-                    </button>
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                setIsLoading(false);
+                showError("Este portafolio no te pertenece");
+            }
+        }
+        void fetchPortfolioData();
+    }, [username, showError, setIsLoading, DynamicSection, cookies.accessToken, itemType, isUserOwner]);
+
+
+    return (
+        <>
+            <PortfolioEditNavbar username={username!}/>
+            <LoadingCover loading={isLoading}/>
+            <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
+            <SuccessDialog isSuccessOpen={isSuccessOpen} successMessage={successMessage}
+                           onClose={() => location.reload()}/>
+            {!componentResult.error && !isLoading && DynamicSection && isUserOwner &&
+                <div className="
+                flex flex-col gap-8 w-full lg:w-5/6
+                relative mt-12">
+                    <Suspense>
+                        <DynamicSection username={username} portfolioComponent={componentResult.component}
+                                        showError={showError}
+                                        showSuccess={showSuccess}/>
+                    </Suspense>
                 </div>
-            </div>
-        );
-    }
-    else
-        return <LandingSite/>
+            }
+        </>
+    );
 }

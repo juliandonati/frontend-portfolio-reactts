@@ -5,7 +5,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import type {Portfolio} from "../../types/Portfolio.ts";
 
 import {PortfolioView} from "../PortfolioView/PortfolioView.tsx";
-import {PortfolioEdit} from "../PortfolioEdit/PortfolioEdit.tsx";
 import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
 import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
 import {LoadingCover} from "../../components/layout/Miscellaneous/LoadingCover.tsx";
@@ -22,7 +21,7 @@ export function Portfolio(): JSX.Element {
     const [isLoading,setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const {username, action} = useParams<string>();
+    const {username} = useParams<string>();
     useEffect(() => {
         if (username)
             getUserPortfolioByName(username)
@@ -41,10 +40,7 @@ export function Portfolio(): JSX.Element {
     }, [username,showError,setIsLoading]);
 
     if (portfolioResult.portfolio) {
-        return action == 'view' ? (
-                <PortfolioView portfolio={portfolioResult.portfolio} username={username!}/> ) :
-        (<PortfolioEdit portfolio={portfolioResult.portfolio} username={username!}/>
-        );
+        return (<PortfolioView portfolio={portfolioResult.portfolio} username={username!}/>);
     } else {
         return (
             <>

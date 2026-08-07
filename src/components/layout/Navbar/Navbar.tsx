@@ -14,7 +14,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav>
+        <nav id="main-navbar">
             <ul className="flex mx-auto">
                 <li className="navbar-option" onClick={() => navigate('/')}>
                     <p className="hidden md:block">Inicio</p>

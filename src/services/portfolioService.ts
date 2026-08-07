@@ -1,6 +1,5 @@
 import type {Portfolio} from "../types/Portfolio.ts";
 import {API_BASE_URL} from "./apiConfig.ts";
-
 const API_PORTFOLIO_URL = API_BASE_URL + '/portfolio';
 
 export async function getUserPortfolioByName(name : string): Promise<Portfolio>{
@@ -49,3 +48,4 @@ export async function createPortfolioByName(name:string, token:string):Promise<P
 
     return await response.json();
 }
+

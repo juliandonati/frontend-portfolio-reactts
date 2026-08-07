@@ -5,7 +5,7 @@ function LandingSite(){
 
     return (
         <div className="
-        grid grid-rows-[15rem_10rem_15rem] md:grid-rows-[15rem_5rem_15rem] gap-10
+        grid grid-rows-[15rem_10rem_15rem] md:grid-rows-[15rem_5rem_15rem] gap-10 mt-16
         h-full
         2xl:gap-48
         ">
