@@ -13,7 +13,7 @@ interface LoadingCoverProps{
 
 export function LoadingCover({loading}:LoadingCoverProps) {
     return loading && (
-        <div className="sweet-loading w-full h-full fixed top-0">
+        <div className="sweet-loading w-full h-full fixed top-0 z-30">
             <div className="w-full h-full bg-black opacity-25 absolute"/>
             <div className="w-fit mx-auto mt-[50%] md:mt-[15%]">
                 <MoonLoader
