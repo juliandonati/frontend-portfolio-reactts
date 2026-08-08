@@ -24,7 +24,7 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
             relative
             z-10
             ">
-                <h4 className="text-4xl">{name}</h4>
+                <h4 className="text-4xl underline">{name}</h4>
                 <strong className="text-3xl">Nivel: {level}</strong>
                 <strong className="text-3xl">Categoría: {category}</strong>
                 <p className="text-2xl mt-6">{description}</p>

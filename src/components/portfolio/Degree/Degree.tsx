@@ -30,7 +30,7 @@ export function Degree({name, description, startDate, endDate, imgUrl}: DegreePr
             lg:relative lg:left-32
             gap-8 lg:gap-0
             lg:max-w-110">
-                <h4 className="text-4xl z-20">{name}</h4>
+                <h4 className="text-4xl underline z-20">{name}</h4>
                 <strong
                     className="text-3xl z-20">Inicio: {startDate.toString()} {endDate ? `, Finalización: ${endDate.toString()}` : " (EN CURSO)"}</strong>
                 <p className="text-3xl z-20">{description}</p>
