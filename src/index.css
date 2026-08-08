@@ -10,7 +10,7 @@
 
     --color-btn-principal: #253C78;
     --color-btn-secundario: #296205;
-    --color-btn-terciario: #FC7753;
+    --color-btn-terciario: #ea4410;
 
     --color-card: rgba(0, 0, 0, .03);
 }
@@ -19,18 +19,27 @@
 @layer components {
     /* Luego puedo dividirlo en varios .css, y utilizar import acá, en el index.css */
     .btn-primario {
-        @apply block h-18 w-auto
-        text-3xl content-center font-boton lg:p-4 bg-btn-principal text-secundario shadow-xl shadow-secundario rounded-full
+        @apply block h-22 w-auto
+        text-3xl content-center font-boton lg:p-4 bg-btn-principal text-secundario text-shadow-black text-shadow-xs shadow-xl shadow-secundario rounded-full
         transition duration-300 ease-in-out
         hover:bg-secundario hover:text-btn-principal hover:shadow-btn-principal cursor-pointer select-none
     }
 
     .btn-secundario {
-        @apply block h-18 w-auto
-        text-3xl content-center font-boton p-4 bg-btn-secundario text-secundario shadow-xl shadow-secundario rounded-full
+        @apply block h-22 w-auto
+        text-3xl content-center font-boton p-4 bg-btn-secundario text-secundario text-shadow-black text-shadow-xs shadow-xl shadow-secundario rounded-full
         transition duration-300 ease-in-out
         hover:bg-secundario hover:text-btn-secundario hover:shadow-btn-secundario cursor-pointer select-none
     }
+
+    .btn-terciario {
+        @apply block h-22 w-auto
+        text-3xl content-center font-boton p-4 bg-btn-terciario text-secundario text-shadow-black text-shadow-xs shadow-xl shadow-secundario rounded-full
+        transition duration-300 ease-in-out
+        hover:bg-secundario hover:text-btn-terciario hover:shadow-btn-terciario cursor-pointer select-none
+    }
+
+
 
     .dialog {
         & div {

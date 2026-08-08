@@ -1,5 +1,5 @@
-import {type JSX} from "react";
-import {useLocation, useParams} from "react-router-dom";
+import {type JSX, useEffect, useMemo} from "react";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import GenericForm, {type FormEntry, type FormStructure} from "../../components/ui/GenericForm.tsx";
 import {useCookies} from "react-cookie";
 import ErrorDialog from "../../components/layout/Miscellaneous/ErrorDialog.tsx";
@@ -7,6 +7,8 @@ import {useErrorDialog} from "../../hooks/useErrorDialog.ts";
 import type {Token} from "../../App.tsx";
 import {SuccessDialog} from "../../components/layout/Miscellaneous/SuccessDialog.tsx";
 import {useSuccessDialog} from "../../hooks/useSuccessDialog.ts";
+import {decodeToken} from "react-jwt";
+import type {CustomJwtPayload} from "../ControlPanel/ControlPanel.tsx";
 
 const degreeFormEntryList: FormEntry[] = [
     {name: 'name', label: 'Nombre', dataType: 'string'},
@@ -32,12 +34,30 @@ const skillFormEntryList: FormEntry[] = [
     {name: 'category', label: 'Categoría', dataType: 'string'}
 ];
 
+
 export function PortfolioCreateItem(): JSX.Element {
     const [cookies, ,] = useCookies(['accessToken']);
-    const {username, itemType, itemId} = useParams();
+    const {itemType, itemId} = useParams();
     const location = useLocation();
-    const {isSuccessOpen, successMessage, showSuccess, hideSuccess} = useSuccessDialog();
-    const {isErrorOpen, errorMessage, showError, hideError} = useErrorDialog();
+    const navigate = useNavigate();
+    const {isSuccessOpen, successMessage, showSuccess} = useSuccessDialog();
+    const {isErrorOpen, errorMessage, showError} = useErrorDialog();
+
+    const {username, tokenError} = useMemo(() => {
+        if (!cookies.accessToken) {
+            return {username: undefined, tokenError: "Tu sesión ha expirado. Vuelve a iniciar sesión"};
+        }
+        const decodedToken = decodeToken<CustomJwtPayload>(cookies.accessToken);
+        if (!decodedToken) {
+            return {username: undefined, tokenError: "Token inválido. Vuelve a iniciar sesión"};
+        }
+        return {username: decodedToken.sub.toString(), tokenError: undefined};
+    }, [cookies.accessToken]);
+    useEffect(() => {
+        if (tokenError)
+            showError(tokenError);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tokenError])
 
 
     const itemToSubmit = itemType == 'degrees' ? 'título académico' : (itemType == 'experience' ? 'trabajo' : 'habilidad');
@@ -65,29 +85,31 @@ export function PortfolioCreateItem(): JSX.Element {
     }
     formPath = formPath! + (itemId ? itemId : username);
 
-
-    /* todo Crear cartel cuando se logra hacer un cambio exitosamente. */
-
-    /* todo Crear cartel antes de hacer cambios. */
-
-    /* todo Separar secciones de edición, ya que los cambios se guardan individualmente. */
-
-    /* todo Crear modo de edición. Posiblemente usando un prop. */
-
     const jwt: Token = {
         tokenType: "Bearer",
         accessToken: cookies.accessToken
     };
     const state = location.state;
+    const itemEditBaseUrl = `/u/${username}/edit/${itemType}`;
     return (
-        <div className="portfolio-edit-section">
-            <SuccessDialog isSuccessOpen={isSuccessOpen} successMessage={successMessage} onClose={hideSuccess}/>
-            <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={hideError}/>
-            <GenericForm formStructure={formStructure!} formPath={formPath!} formMethod={itemId ? 'PUT':'POST'}
-                         currentFormData={itemId ? state :{}}
-                         postFormFunc={() => showSuccess('¡Los cambios han sido realizados exitosamente!')}
-                         token={jwt}
-                         postErrorCallback={showError}/>
-        </div>
+        <>
+            <SuccessDialog isSuccessOpen={isSuccessOpen} successMessage={successMessage} onClose={()=>navigate(itemEditBaseUrl)}/>
+            <ErrorDialog isOpen={isErrorOpen} errorMessage={errorMessage} onClose={() => navigate("/login")}/>
+            {
+                username &&
+                <div className="portfolio-edit-section gap-0">
+                        <GenericForm formStructure={formStructure!} formPath={formPath!}
+                                   formMethod={itemId ? 'PUT' : 'POST'}
+                                   currentFormData={itemId ? state : {}}
+                                   postFormFunc={() => showSuccess('¡Los cambios han sido realizados exitosamente!')}
+                                   token={jwt}
+                                   postErrorCallback={showError}/>
+                        <button className="btn-terciario w-2/3 mx-auto"
+                                onClick={() => navigate(itemEditBaseUrl)}>VOLVER
+                        </button>
+                </div>
+            }
+        </>
     );
 }
+
