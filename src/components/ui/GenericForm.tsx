@@ -93,7 +93,7 @@ export default function GenericForm<T>({
         if (containsImages)
             loadModel()
                 .then(() => console.log("Modelo nsfwjs cargado correctamente"))
-                .catch((error: Error) => console.log("Error al cargar el modelo nsfwjs:" + error.message))
+                .catch((error: Error) => console.error("Error al cargar el modelo nsfwjs:" + error.message))
                 .finally(() => setIsModelLoading(false));
     }, [formStructure, containsImages]);
 
@@ -175,7 +175,7 @@ export default function GenericForm<T>({
                         postErrorCallback(response.statusText);
                 }
             )
-            .catch((error: Error) => console.log("ERROR:" + error.message));
+            .catch((error: Error) => console.error("ERROR:" + error.message));
     }
 
     function validateAndSubmitForm(e: React.SubmitEvent<HTMLElement>) {
@@ -269,8 +269,6 @@ export default function GenericForm<T>({
             {...prevValues, [name]: newEntryValue}
         ));
     }
-
-    // console.log(`Metodo de ${formStructure.formId}: ${formMethod}`);
 
     return (
         <>
