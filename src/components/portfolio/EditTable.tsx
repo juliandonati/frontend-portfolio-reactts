@@ -52,30 +52,30 @@ export function EditTable<T extends PortfolioItem>({
                 </thead>
                 <tbody>
                 {data.map((item:T) =>
-                    <tr>
+                    <tr className="h-20 lg:h-30">
                         {Object.values(item as Record<string, unknown>).map((value) => {
                                 const valueAsString = value ? (typeof value === 'string' ? value : String(value)) : 'N/A';
 
                                 const isImageUrl:boolean = valueAsString.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) != null || valueAsString.startsWith('blob:');
 
                                 return (
-                                    <td className="h-40 text-center">
-                                        {!isImageUrl ? (<p>{valueAsString}</p>) : (<img className="object-cover w-full h-full" src={valueAsString} alt="Imagen"/>)}
+                                    <td className="h-full text-center">
+                                        {!isImageUrl ? (<p>{valueAsString}</p>) : (<img className="object-fit w-30 h-30 mx-auto" src={valueAsString} alt="Imagen"/>)}
                                     </td>);
                             }
                         )}
-                        <td>
-                            <ul className="grid grid-cols-2 px-4 gap-8">
+                        <td className="h-full">
+                            <ul className="grid grid-cols-2 text-center gap-8 lg:gap-0">
                                 <li onClick={() =>
                                     navigate(`/item/${itemName}/${item.id}/edit`, {
                                         state: item
                                     })}>
                                     <i title="Editar"
-                                       className="fa fa-edit text-yellow-500 text-shadow-md text-shadow-black cursor-pointer select-none"/>
+                                       className="fa fa-edit text-yellow-500 text-shadow-md text-shadow-black cursor-pointer select-none text-3xl lg:text-5xl"/>
                                 </li>
                                 <li onClick={() => deleteItem(item.id)}>
                                     <i title="Eliminar"
-                                       className="fa fa-trash text-red-700 text-shadow-md text-shadow-black cursor-pointer select-none"/>
+                                       className="fa fa-trash text-red-700 text-shadow-md text-shadow-black cursor-pointer select-non text-3xl lg:text-5xl"/>
                                 </li>
                             </ul>
                         </td>
