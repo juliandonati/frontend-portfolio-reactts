@@ -73,7 +73,6 @@ export function PortfolioEdit(): JSX.Element {
                 setIsLoading(true);
                 let portfolioComponentService: PortfolioComponentService<PortfolioComponent>;
                 const activeItemType = itemType ? itemType : 'presentation';
-                console.log("Ruta actual:", {itemType, activeItemType});
                 switch (activeItemType) {
                     case 'skills':
                         portfolioComponentService = new PortfolioSkillListService(username!, cookies.accessToken);
@@ -115,7 +114,7 @@ export function PortfolioEdit(): JSX.Element {
                 }
             } else {
                 setIsLoading(false);
-                showError("Este portafolio no te pertenece");
+                showError("Este portafolio no te pertenece, o debes iniciar sesión de vuelta");
             }
         }
         void fetchPortfolioData();

@@ -1,7 +1,10 @@
-import {type ChangeEvent, type JSX, useState} from "react";
+import {type ChangeEvent, type JSX, useEffect, useState} from "react";
 import {API_BASE_URL} from "../../services/apiConfig.ts";
 import type {Token} from "../../App.tsx";
 import {LoadingCover} from "../layout/Miscellaneous/LoadingCover.tsx";
+import * as nsfwjs from 'nsfwjs';
+import {NSFWJS} from "nsfwjs";
+import * as React from "react";
 
 export interface FormEntry {
     name: string;
@@ -68,7 +71,7 @@ export default function GenericForm<T>({
     );
     const [formEntryErrors, setFormEntryErrors] = useState<Record<string, string>>(
         formStructure.formEntryList.reduce((acumulador, formEntry) => {
-            acumulador[formEntry.name]='';
+            acumulador[formEntry.name] = '';
             return acumulador;
         }, {} as Record<string, string>)
     );
@@ -77,27 +80,41 @@ export default function GenericForm<T>({
     const [submitting, setSubmitting] = useState(false);
 
 
-    function submitForm(e: React.SubmitEvent<HTMLElement>) {
-        e.preventDefault();
+    // nsfwjs
+    const [model, setModel] = useState<NSFWJS | null>(null);
+    const containsImages = formStructure.formEntryList.some((formEntry) => formEntry.dataType == 'image');
+    const [isModelLoading, setIsModelLoading] = useState<boolean>(containsImages);
+    useEffect(() => {
+        async function loadModel() {
+            const modelToSet = await nsfwjs.load();
+            setModel(modelToSet);
+        }
+
+        if (containsImages)
+            loadModel()
+                .then(() => console.log("Modelo nsfwjs cargado correctamente"))
+                .catch((error: Error) => console.log("Error al cargar el modelo nsfwjs:" + error.message))
+                .finally(() => setIsModelLoading(false));
+    }, [formStructure, containsImages]);
+
+
+    function submitForm() {
         setSubmitting(true);
-
-        let formDataEntryValuesString: string = '{';
         let formDataImageFile: File | undefined = undefined;
+        const jsonPayload: Record<string, string> = {};
 
-        /* todo Reemplazar toda esta peligrosidad por un JSON.stringify()*/
-        if (Object.entries(formEntryValues)[0][1] != '' || undefined) {
-            Object.entries(formEntryValues).forEach(([name, value]) => {
-                if (value) {
-                    if (!(value instanceof File))
-                        formDataEntryValuesString = formDataEntryValuesString + `"${name}":"${value}",`;
-                    else {
-                        formDataImageFile = value;
-                    }
-                }
-            });
-            formDataEntryValuesString = formDataEntryValuesString.substring(0, formDataEntryValuesString.length - 1) + '}';
-        } else
-            formDataEntryValuesString = formDataEntryValuesString + '}';
+        // Separamos el archivo de los datos de texto
+        Object.entries(formEntryValues).forEach(([name, value]) => {
+            if (value instanceof File) {
+                formDataImageFile = value;
+            } else if (value !== undefined && value !== null) {
+                // Guardamos en un objeto limpio lo que sea texto o fechas
+                jsonPayload[name] = value as string;
+            }
+        });
+
+        // JSON.stringify se encarga automáticamente de las llaves {}
+        const formDataEntryValuesString = JSON.stringify(jsonPayload);
 
 
         const formData = new FormData();
@@ -161,6 +178,15 @@ export default function GenericForm<T>({
             .catch((error: Error) => console.log("ERROR:" + error.message));
     }
 
+    function validateAndSubmitForm(e: React.SubmitEvent<HTMLElement>) {
+        e.preventDefault();
+
+        const areThereFormEntryErrors = Object.values(formEntryErrors).some(error => error !== '');
+
+        if (!areThereFormEntryErrors)
+            submitForm();
+    }
+
     function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
         const {name, type, files, value, valueAsDate} = e.target;
         let newEntryValue;
@@ -168,17 +194,75 @@ export default function GenericForm<T>({
             newEntryValue = files.length > 0 ? files[0] : undefined;
             if (newEntryValue instanceof File) {
                 const previewUrl = URL.createObjectURL(newEntryValue);
+                // Settear vista previa de imagen
                 setImagePreviews(prev => ({...prev, [name]: previewUrl}));
+
+                // Lógica de análisis NSFW.js
+                if (model) {
+                    const img = new Image();
+                    img.src = previewUrl;
+
+                    img.onload = async () => {
+                        try {
+                            // Crear canvas virtual en memoria
+                            const canvas = document.createElement('canvas');
+                            // Darle dimensiones a la imagen para que TensorFlow pueda analizarla
+                            const size = Math.min(img.naturalWidth, img.naturalHeight);
+                            const sx = (img.naturalWidth - size) / 2;
+                            const sy = (img.naturalHeight - size) / 2;
+                            // Dibujar imagen en el canvas
+                            const ctx = canvas.getContext('2d');
+                            if (!ctx)
+                                postErrorCallback("No se pudo crear el contexto del canvas para NSFW.js");
+                            else
+                                ctx.drawImage(img, sx, sy, size, size, 0, 0, 224, 224);
+                            // Analizamos el canvas
+                            const predictions = await model.classify(canvas);
+                            const getProbability = (category:string) => {
+                                const prediction = predictions.find(p => p.className === category);
+                                return prediction ? prediction.probability : 0;
+                            };
+                            // Probabilidades individuales
+                            const pornProb = getProbability('Porn');
+                            const hentaiProb = getProbability('Hentai');
+                            const sexyProb = getProbability('Sexy');
+                            // Umbrales individuales
+                            const isPorn = pornProb > 0.6;
+                            const isHentai = hentaiProb > 0.6;
+                            const isSexy = sexyProb > 0.85;
+                            // Umbral combinado
+                            const isHighlySuspicious = (pornProb + sexyProb);
+
+                            const isNSFW = isPorn || isHentai || isSexy || isHighlySuspicious;
+                            if (isNSFW) {
+                                // Mostrar error
+                                setFormEntryErrors(prev => ({
+                                    ...prev,
+                                    [name]: 'Imagen bloqueada por contenido inapropiado.'
+                                }));
+                                // Limpiar vista previa
+                                setImagePreviews(prev => ({...prev, [name]: ''}));
+                                // Eliminar imagen del formulario
+                                setFormEntryValues(prev => ({...prev, [name]: undefined}));
+                            } else
+                                // Eliminar error
+                                setFormEntryErrors(prev => ({...prev, [name]: ''}));
+                        } catch (error) {
+                            postErrorCallback("Error al analizar la imagen con NSFW.js: " + error);
+                        }
+                    }
+                }
             }
         } else {
             if (type === 'date') {
                 const rawDate = valueAsDate;
-                if (rawDate)
+                if (rawDate) {
                     newEntryValue = formatDate(rawDate);
-                else
+                } else
                     newEntryValue = null;
             } else
                 newEntryValue = value;
+            setFormEntryErrors(prev => ({...prev, [name]: ''}));
         }
 
         setFormEntryValues((prevValues) => (
@@ -191,7 +275,7 @@ export default function GenericForm<T>({
     return (
         <>
             <div className="absolute left-0">
-                <LoadingCover loading={submitting}/>
+                <LoadingCover loading={submitting || isModelLoading}/>
             </div>
             <div className="flex flex-col items-center w-2/3 lg:w-200 mx-auto text-center">
 
@@ -199,7 +283,7 @@ export default function GenericForm<T>({
 
                 <form id={formStructure.formId}
                       encType="multipart/form-data"
-                      onSubmit={(e) => submitForm(e)}
+                      onSubmit={(e) => validateAndSubmitForm(e)}
                       className="flex flex-col w-full items-center gap-4 py-10"
                 >
                     {formStructure.formEntryList.map((formEntry: FormEntry): JSX.Element | undefined => {
@@ -214,7 +298,8 @@ export default function GenericForm<T>({
                                                id={formEntry.name} value={formEntryValues[formEntry.name] as string}
                                                className="form-input"
                                         ></input>
-                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
+                                        {formEntryErrors[formEntry.name] &&
+                                            <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             case "password":
@@ -227,7 +312,8 @@ export default function GenericForm<T>({
                                                id={formEntry.name} value={formEntryValues[formEntry.name] as string}
                                                className="form-input"
                                         ></input>
-                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
+                                        {formEntryErrors[formEntry.name] &&
+                                            <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             case "date":
@@ -240,7 +326,8 @@ export default function GenericForm<T>({
                                                id={formEntry.name} value={formEntryValues[formEntry.name]?.toString()}
                                                className="form-input"
                                         ></input>
-                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
+                                        {formEntryErrors[formEntry.name] &&
+                                            <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             case "image": {
@@ -261,7 +348,8 @@ export default function GenericForm<T>({
                                                 <img className="object-cover w-full h-full" alt={formEntry.label}
                                                      src={previewSrc}/>
                                             </div>}
-                                        {formEntryErrors[formEntry.name] && <p className="form-error">{formEntryErrors[formEntry.name]}</p>}
+                                        {formEntryErrors[formEntry.name] &&
+                                            <p className="form-error text-2xl 2xl:text-4xl">{formEntryErrors[formEntry.name]}</p>}
                                     </div>
                                 );
                             }
