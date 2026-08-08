@@ -26,9 +26,9 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
         ">
 
             <div
-                className="portfolio-section grid grid-rows-[1fr_1fr_5fr_1fr] w-full
+                className="portfolio-section grid grid-rows-[1fr_1fr_5fr_2fr] w-full
                         justify-items-center text-center
-                        h-dvh
+                        h-[90vh]
                         md:h-[80vh]
                         2xl:h-[60vh]">
                 <h3 className="portfolio-title">¡Hola, soy {presentation.name}!</h3>
@@ -37,7 +37,7 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                     <img alt={`Imagen de ${presentation.name}`} src={presentation.imgUrl ? presentation.imgUrl : "/default_pfp.jpg"}
                          className="object-cover"/>
                 </div>
-                <p className="portfolio-desc">{presentation.description}</p>
+                <p className="portfolio-desc md:my-auto">{presentation.description}</p>
             </div>
 
 
