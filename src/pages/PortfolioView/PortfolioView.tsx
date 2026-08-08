@@ -13,7 +13,13 @@ interface PortfolioViewProps {
 }
 
 export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.Element {
-    const presentation = portfolio.presentation ? portfolio.presentation : {id:-1, name: username, title:'Mi título', imgUrl: '', description: 'Aquí va mi descripción'} as Presentation;
+    const presentation = portfolio.presentation ? portfolio.presentation : {
+        id: -1,
+        name: username,
+        title: 'Mi título',
+        imgUrl: '',
+        description: 'Aquí va mi descripción'
+    } as Presentation;
     const aboutMe = portfolio.aboutMe;
     const degrees = portfolio.degrees;
     const jobs = portfolio.experience;
@@ -34,7 +40,8 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                 <h3 className="portfolio-title">¡Hola, soy {presentation.name}!</h3>
                 <p className="text-4xl">{presentation.title}</p>
                 <div className="w-96 h-96 mx-auto overflow-hidden shadow-xl shadow-pink-500 rounded-full">
-                    <img alt={`Imagen de ${presentation.name}`} src={presentation.imgUrl ? presentation.imgUrl : "/default_pfp.jpg"}
+                    <img alt={`Imagen de ${presentation.name}`}
+                         src={presentation.imgUrl ? presentation.imgUrl : "/default_pfp.jpg"}
                          className="object-cover"/>
                 </div>
                 <p className="portfolio-desc md:my-auto">{presentation.description}</p>
@@ -58,9 +65,11 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                     ">
                         <h3 className="portfolio-title">{aboutMe.title}</h3>
                         <p className="portfolio-desc m-auto">{aboutMe.description}</p>
-                        {aboutMe.buttonText && aboutMe.buttonUrl && <button
-                            className="btn-primario w-1/4 m-auto"
-                            onClick={() => location.href = aboutMe.buttonUrl}>{aboutMe.buttonText}</button>}
+                        {aboutMe.buttonText && aboutMe.buttonUrl &&
+                            <a
+                                className="btn-primario w-1/4 m-auto"
+                                href={aboutMe.buttonUrl} target="_blank">{aboutMe.buttonText}</a>
+                        }
                     </div>
                 </div>
             }
