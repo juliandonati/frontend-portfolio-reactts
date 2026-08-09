@@ -5,6 +5,7 @@ import type {Portfolio, Presentation} from "../../types/Portfolio.ts";
 import {Degree} from "../../components/portfolio/Degree/Degree.tsx";
 import {Job} from "../../components/portfolio/Job/Job.tsx";
 import {Skill} from "../../components/portfolio/Skill/Skill.tsx";
+import {CloudinaryImage} from "../../components/misc/CloudinaryImage.tsx";
 
 
 interface PortfolioViewProps {
@@ -40,9 +41,11 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                 <h3 className="portfolio-title">¡Hola, soy {presentation.name}!</h3>
                 <p className="text-4xl">{presentation.title}</p>
                 <div className="w-96 h-96 mx-auto overflow-hidden shadow-xl shadow-pink-500 rounded-full">
-                    <img alt={`Imagen de ${presentation.name}`}
-                         src={presentation.imgUrl ? presentation.imgUrl : "/default_pfp.jpg"}
-                         className="object-cover"/>
+                    <CloudinaryImage
+                        alt={`Imagen de ${presentation.name}`}
+                        src={presentation.imgUrl ? presentation.imgUrl : "/default_pfp.jpg"}
+                        className="object-cover"
+                    />
                 </div>
                 <p className="portfolio-desc md:my-auto">{presentation.description}</p>
             </div>
@@ -52,7 +55,7 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                 aboutMe &&
                 <div className="portfolio-section relative w-full h-100 overflow-hidden">
                     <div className="w-full h-100 absolute top-0 left-0">
-                        <img
+                        <CloudinaryImage
                             className="absolute z-0 object-cover w-full h-full"
                             alt={`Fondo del AboutMe de ${presentation.name}`}
                             src={aboutMe.bgImgUrl ? aboutMe.bgImgUrl : "https://wallpaperaccess.com/full/2033886.jpg"}

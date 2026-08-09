@@ -1,4 +1,5 @@
 import type {JSX} from "react";
+import {CloudinaryImage} from "../../misc/CloudinaryImage.tsx";
 
 interface SkillProps{
     name:string,
@@ -36,10 +37,10 @@ export function Skill({name,description,level,imgUrl,category}:SkillProps):JSX.E
             absolute top-1/2 -translate-y-1/2
             z-2">
                 <div className="z-2 absolute w-full h-full bg-white opacity-75"></div>
-                <img
-                    className="object-cover w-full h-full my-auto z-1"
-                    alt={`Imagen de habilidad en ${name}`}
-                    src={imgUrl ? imgUrl : "https://i.pinimg.com/736x/44/c2/e7/44c2e7a9afbacb46080ba1f0740d48a3.jpg"}/>
+                <CloudinaryImage className="object-cover w-full h-full my-auto z-1"
+                                 alt={`Imagen de habilidad en ${name}`}
+                                 src={imgUrl ? imgUrl : "https://i.pinimg.com/736x/44/c2/e7/44c2e7a9afbacb46080ba1f0740d48a3.jpg"}
+                />
             </div>
         </li>
     );

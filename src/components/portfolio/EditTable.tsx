@@ -2,6 +2,7 @@ import type {JSX} from "react";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {API_BASE_URL} from "../../services/apiConfig.ts";
+import {CloudinaryImage} from "../misc/CloudinaryImage.tsx";
 
 interface EditTableProps<T extends PortfolioItem> {
     tableHeaders: string[],
@@ -60,7 +61,9 @@ export function EditTable<T extends PortfolioItem>({
 
                                 return (
                                     <td className="h-full text-center">
-                                        {!isImageUrl ? (<p>{valueAsString}</p>) : (<img className="object-fit w-30 h-30 mx-auto" src={valueAsString} alt="Imagen"/>)}
+                                        {!isImageUrl ?
+                                            (<p>{valueAsString}</p>) :
+                                            (<CloudinaryImage className="object-fit w-30 h-30 mx-auto" src={valueAsString} alt="Imagen"/>)}
                                     </td>);
                             }
                         )}

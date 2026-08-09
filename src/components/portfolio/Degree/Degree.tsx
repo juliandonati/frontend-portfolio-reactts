@@ -1,4 +1,5 @@
 import type {JSX} from "react";
+import {CloudinaryImage} from "../../misc/CloudinaryImage.tsx";
 
 interface DegreeProps {
     name: string,
@@ -43,10 +44,10 @@ export function Degree({name, description, startDate, endDate, imgUrl}: DegreePr
             lg:h-80 lg:w-80 lg:rounded-tl-[8rem] lg:shadow lg:shadow-[rgba(0,0,0,.5)]
             ">
                 <div className="absolute top-0 left-0 w-full h-full bg-secundario opacity-75 z-10 lg:hidden"></div>
-                <img
-                    className="absolute lg:static w-full h-full top-0 left-0 object-cover z-0"
-                    alt={`Imagen del título de ${name}`}
-                    src={imgUrl ? imgUrl : "https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-a-book/how-to-draw-a-book-step-6.jpg"}/>
+                <CloudinaryImage className="absolute lg:static w-full h-full top-0 left-0 object-cover z-0"
+                                 alt={`Imagen del título de ${name}`}
+                                 src={imgUrl ? imgUrl : "https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-a-book/how-to-draw-a-book-step-6.jpg"}
+                />
             </div>
         </li>
     );

@@ -5,6 +5,7 @@ import {LoadingCover} from "../layout/Miscellaneous/LoadingCover.tsx";
 import * as nsfwjs from 'nsfwjs';
 import {NSFWJS} from "nsfwjs";
 import * as React from "react";
+import {CloudinaryImage} from "../misc/CloudinaryImage.tsx";
 
 export interface FormEntry {
     name: string;
@@ -226,12 +227,15 @@ export default function GenericForm<T>({
                             const pornProb = getProbability('Porn');
                             const hentaiProb = getProbability('Hentai');
                             const sexyProb = getProbability('Sexy');
+                            console.log("pornProb:",pornProb);
+                            console.log("hentaiProb:",hentaiProb);
+                            console.log("sexyProb:",sexyProb);
                             // Umbrales individuales
                             const isPorn = pornProb > 0.6;
                             const isHentai = hentaiProb > 0.6;
                             const isSexy = sexyProb > 0.85;
                             // Umbral combinado
-                            const isHighlySuspicious = (pornProb + sexyProb);
+                            const isHighlySuspicious = (pornProb + sexyProb) > 0.8;
 
                             const isNSFW = isPorn || isHentai || isSexy || isHighlySuspicious;
                             if (isNSFW) {
@@ -272,9 +276,7 @@ export default function GenericForm<T>({
 
     return (
         <>
-            <div className="absolute left-0">
-                <LoadingCover loading={submitting || isModelLoading}/>
-            </div>
+            <LoadingCover loading={submitting || isModelLoading}/>
             <div className="flex flex-col items-center w-2/3 lg:w-200 mx-auto text-center">
 
                 <h3 className="text-6xl">{formStructure.formName}</h3>
@@ -343,8 +345,8 @@ export default function GenericForm<T>({
                                         ></input>
                                         {formEntryValues[formEntry.name] &&
                                             <div className="w-2/6 overflow-hidden mx-auto">
-                                                <img className="object-cover w-full h-full" alt={formEntry.label}
-                                                     src={previewSrc}/>
+                                                <CloudinaryImage className="object-cover w-full h-full" alt={formEntry.label}
+                                                     src={previewSrc ? previewSrc : ""}/>
                                             </div>}
                                         {formEntryErrors[formEntry.name] &&
                                             <p className="form-error text-2xl 2xl:text-4xl">{formEntryErrors[formEntry.name]}</p>}
