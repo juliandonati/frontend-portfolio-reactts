@@ -81,7 +81,7 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                 <div className="
                 portfolio-section grid grid-rows-[10rem_40rem]
                 ">
-                    <h3 className="portfolio-title">Mi educación</h3>
+                    <h3 className="portfolio-title">MI EDUCACIÓN</h3>
                     <ul className="portfolio-card-list">
                         {degrees.map(degree => <Degree key={degree.id} name={degree.name}
                                                        startDate={degree.startDate}
@@ -95,7 +95,7 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                 <div className="
                 portfolio-section h-200 grid grid-rows[10rem_40rem]
                 ">
-                    <h3 className="portfolio-title">Mi experiencia</h3>
+                    <h3 className="portfolio-title">MI EXPERIENCIA</h3>
                     <ul className="portfolio-card-list">
                         {jobs.map(job => <Job key={job.id} name={job.name} description={job.description}
                                               startDate={job.startDate} endDate={job.endDate}
