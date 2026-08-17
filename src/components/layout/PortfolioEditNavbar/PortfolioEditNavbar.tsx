@@ -8,7 +8,7 @@ export function PortfolioEditNavbar({username}:PortfolioEditNavbarProps){
     return (
         <nav className="
         w-full z-20 bg-white shadow-xs shadow-black
-        h-100
+        h-120
         md:h-16">
             <ul className="
             flex flex-col w-full h-full mx-auto
