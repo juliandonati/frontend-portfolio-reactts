@@ -21,12 +21,12 @@ export default function Project({title,description,startDate,endDate,url,imgUrl}
         overflow-hidden
 
         relative
-        w-9/10 h-120 p-4 lg:w-5/6 lg:p-0
+        w-9/10 h-140 p-4 lg:w-5/6 lg:p-0
         rounded-2xl lg:rounded-t-[8rem]
         lg:grid lg:grid-cols-[2fr_1fr]
         ">
             <div className="
-            grid grid-rows-4 mx-auto p-8 font-sans
+            grid grid-rows-[1fr_1fr_2fr_1fr] mx-auto p-8 text-center font-sans
             lg:relative lg:left-32
             gap-8 lg:gap-0
             lg:max-w-110">
