@@ -1,7 +1,7 @@
-import type {AboutMe, Degree, Job, Presentation, Skill} from "../types/Portfolio.ts";
+import type {AboutMe, Degree, Job, Presentation, Project, Skill} from "../types/Portfolio.ts";
 import {API_BASE_URL} from "./apiConfig.ts";
 
-export type PortfolioComponent = Presentation | AboutMe | Degree[] | Skill[] | Job[];
+export type PortfolioComponent = Presentation | AboutMe | Degree[] | Skill[] | Job[] | Project[];
 export const COMPONENT_NOT_FOUND_MESSAGE = "No se encontró el componente que buscas";
 async function getPortfolioComponent<T extends PortfolioComponent>(username:string,jwt:string,itemType:string,isList:boolean):Promise<T>{
     const response:Response = await fetch(`${API_BASE_URL}/${itemType}/${isList ? 'list/' : ''}${username}`, {
@@ -33,4 +33,5 @@ export class PortfolioPresentationService extends PortfolioComponentService<Pres
 export class PortfolioAboutMeService extends PortfolioComponentService<AboutMe>{get=()=>{return getPortfolioComponent<AboutMe>(this.username,this.jwt,'about-me',false)}}
 export class PortfolioSkillListService extends PortfolioComponentService<Skill[]>{get=()=>{return getPortfolioComponentList<Skill[]>(this.username,this.jwt,'skills')}}
 export class PortfolioDegreeListService extends PortfolioComponentService<Degree[]>{get=()=>{return getPortfolioComponentList<Degree[]>(this.username,this.jwt,'degrees')}}
-export class PortfolioExperienceListService extends PortfolioComponentService<Job[]>{get=()=>{return getPortfolioComponentList<Job[]>(this.username,this.jwt,'experiences')}}
+export class PortfolioExperienceListService extends PortfolioComponentService<Job[]>{get=()=>{return getPortfolioComponentList<Job[]>(this.username,this.jwt,'experience')}}
+export class PortfolioProjectListService extends PortfolioComponentService<Project[]>{get=()=>{return getPortfolioComponentList<Project[]>(this.username,this.jwt,'projects')}}

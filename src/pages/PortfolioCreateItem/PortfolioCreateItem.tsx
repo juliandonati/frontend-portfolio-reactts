@@ -15,7 +15,7 @@ const degreeFormEntryList: FormEntry[] = [
     {name: 'description', label: 'Descripción', dataType: 'string'},
     {name: 'startDate', label: 'Fecha de inicio', dataType: 'date'},
     {name: 'endDate', label: 'Fecha de egreso', dataType: 'date'},
-    {name: 'imgUrl', label: 'Imagen', dataType: 'image'}
+    {name: 'img-file', label: 'Imagen', dataType: 'image'}
 ];
 
 const jobFormEntryList: FormEntry[] = [
@@ -32,6 +32,15 @@ const skillFormEntryList: FormEntry[] = [
     {name: 'level', label: 'Dominio', dataType: 'string'},
     {name: 'img-file', label: 'Imagen', dataType: 'image'},
     {name: 'category', label: 'Categoría', dataType: 'string'}
+];
+
+const projectFormEntryList: FormEntry[] = [
+    {name: 'title', label: 'Título', dataType: 'string'},
+    {name: 'description', label: 'Descripción', dataType: 'string'},
+    {name: 'startDate', label: 'Fecha de inicio', dataType: 'date'},
+    {name: 'endDate', label: 'Fecha de finalización', dataType: 'date'},
+    {name: 'url', label: 'URL', dataType: 'string'},
+    {name: 'img-file', label: 'Imagen', dataType: 'image'}
 ];
 
 
@@ -60,10 +69,31 @@ export function PortfolioCreateItem(): JSX.Element {
     }, [tokenError])
 
 
-    const itemToSubmit = itemType == 'degrees' ? 'título académico' : (itemType == 'experience' ? 'trabajo' : 'habilidad');
+    let itemToSubmit: string;
+    let formId: string;
+
+    switch (itemType) {
+        case 'degrees':
+            itemToSubmit =  'título académico';
+            formId = 'degree';
+            break;
+        case 'experience':
+            itemToSubmit =  'trabajo';
+            formId = 'job';
+            break;
+        case 'skills':
+            itemToSubmit =  'habilidad';
+            formId = 'skill';
+            break;
+        default:
+            itemToSubmit =  'proyecto';
+            formId = 'project';
+            break;
+    }
+
     const formStructure: FormStructure = {
         formEntryList: [],
-        formId: itemType == 'degrees' ? 'degree' : (itemType == 'experience' ? 'job' : 'skill'),
+        formId: formId,
         formName: `${itemId ? 'Editar' : 'Documentar'} ${itemToSubmit}`,
         submitBtnText: `Guardar ${itemToSubmit}`
     };
@@ -81,6 +111,10 @@ export function PortfolioCreateItem(): JSX.Element {
         case 'skills':
             formStructure.formEntryList.push(...skillFormEntryList);
             formPath = `skills/`;
+            break;
+        case 'projects':
+            formStructure.formEntryList.push(...projectFormEntryList);
+            formPath = 'projects/';
             break;
     }
     formPath = formPath! + (itemId ? itemId : username);

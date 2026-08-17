@@ -11,7 +11,7 @@ import {
     COMPONENT_NOT_FOUND_MESSAGE,
     PortfolioAboutMeService, type PortfolioComponent,
     type PortfolioComponentService, PortfolioDegreeListService,
-    PortfolioExperienceListService, PortfolioPresentationService,
+    PortfolioExperienceListService, PortfolioPresentationService, PortfolioProjectListService,
     PortfolioSkillListService
 } from "../../services/portfolioComponentService.ts";
 import * as React from "react";
@@ -38,6 +38,7 @@ const DegreeEditSection = React.lazy(() => import('../../components/portfolioEdi
 const ExperienceEditSection = React.lazy(() => import('../../components/portfolioEdit/ExperienceEditSection/ExperienceEditSection'));
 const PresentationEditSection = React.lazy(() => import('../../components/portfolioEdit/PresentationEditSection/PresentationEditSection'));
 const AboutMeEditSection = React.lazy(() => import('../../components/portfolioEdit/AboutMeEditSection/AboutMeEditSection'));
+const ProjectEditSection = React.lazy(() => import('../../components/portfolioEdit/ProjectEditSection/ProjectEditSection'));
 
 // Mapa de componentes
 const SECTION_COMPONENTS: Record<string, React.ComponentType<EditSectionProps>> = {
@@ -45,7 +46,8 @@ const SECTION_COMPONENTS: Record<string, React.ComponentType<EditSectionProps>> 
     'degrees': DegreeEditSection,
     'experience': ExperienceEditSection,
     'presentation': PresentationEditSection,
-    'about-me': AboutMeEditSection
+    'about-me': AboutMeEditSection,
+    'projects': ProjectEditSection
 };
 
 export function PortfolioEdit(): JSX.Element {
@@ -82,6 +84,9 @@ export function PortfolioEdit(): JSX.Element {
                         break;
                     case 'degrees':
                         portfolioComponentService = new PortfolioDegreeListService(username!, cookies.accessToken);
+                        break;
+                    case 'projects':
+                        portfolioComponentService = new PortfolioProjectListService(username!, cookies.accessToken);
                         break;
                     case 'about-me':
                         portfolioComponentService = new PortfolioAboutMeService(username!, cookies.accessToken);

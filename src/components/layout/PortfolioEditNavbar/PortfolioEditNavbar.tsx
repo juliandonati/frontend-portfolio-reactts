@@ -18,6 +18,7 @@ export function PortfolioEditNavbar({username}:PortfolioEditNavbarProps){
                 <li className="alt-navbar-option"><Link to={`/u/${username}/edit/degrees`}><p>TÍTULOS</p></Link></li>
                 <li className="alt-navbar-option"><Link to={`/u/${username}/edit/experience`}><p>EXPERIENCIA</p></Link></li>
                 <li className="alt-navbar-option"><Link to={`/u/${username}/edit/skills`}><p>HABILIDADES</p></Link></li>
+                <li className="alt-navbar-option"><Link to={`/u/${username}/edit/projects`}><p>PROYECTOS</p></Link></li>
             </ul>
         </nav>
     )

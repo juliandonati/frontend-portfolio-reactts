@@ -42,6 +42,16 @@ export type Job = {
     endDate: Date
 }
 
+export type Project = {
+    id: number,
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    url: string,
+    imgUrl: string
+}
+
 export type Portfolio = {
     owner: string,
     presentation: Presentation,
