@@ -58,5 +58,6 @@ export type Portfolio = {
     aboutMe: AboutMe,
     degrees: Degree[],
     skills: Skill[],
-    experience: Job[]
+    experience: Job[],
+    projects: Project[]
 }

@@ -6,6 +6,7 @@ import {Degree} from "../../components/portfolio/Degree/Degree.tsx";
 import {Job} from "../../components/portfolio/Job/Job.tsx";
 import {Skill} from "../../components/portfolio/Skill/Skill.tsx";
 import {CloudinaryImage} from "../../components/misc/CloudinaryImage.tsx";
+import Project from "../../components/portfolio/Project/Project.tsx";
 
 
 interface PortfolioViewProps {
@@ -25,6 +26,7 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
     const degrees = portfolio.degrees;
     const jobs = portfolio.experience;
     const skills = portfolio.skills;
+    const projects = portfolio.projects;
     return (
         <div className="
         flex flex-col w-full items-center
@@ -117,6 +119,21 @@ export function PortfolioView({portfolio, username}: PortfolioViewProps): JSX.El
                         {skills.map(skill => <Skill key={skill.id} name={skill.name} description={skill.description}
                                                     imgUrl={skill.imgUrl} category={skill.category}
                                                     level={skill.level}/>)}
+                    </ul>
+                </div>
+            }
+            {
+                projects.length > 0 &&
+                <div className="
+                portfolio-section grid grid-rows-[10rem_40rem]
+                ">
+                    <h3 className="portfolio-title">MIS PROYECTOS</h3>
+                    <ul className="portfolio-card-list">
+                        {projects.map(project =>
+                            <Project key={project.id} title={project.title} description={project.description}
+                                     startDate={project.startDate} endDate={project.endDate}
+                                     url={project.url} imgUrl={project.imgUrl}
+                            />)}
                     </ul>
                 </div>
             }
