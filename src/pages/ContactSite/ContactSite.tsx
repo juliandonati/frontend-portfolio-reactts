@@ -9,8 +9,8 @@ export function ContactSite() {
                 <div className="gap-8 flex flex-col p-16 z-1">
                     <h3 className="text-6xl underline">Mis medios de contacto:</h3>
                     <ul className="text-4xl list-disc flex flex-col gap-8">
-                        <li><span className="underline decoration-dashed">Número celular:</span><br/> +54 9 223 690 0433</li>
-                        <li><span className="underline decoration-dashed">Correo electrónico:</span><br/> juliandonati5@gmail.com</li>
+                        
+                        <li><span className="underline decoration-dashed">Correo electrónico:</span><br/> contacto@juliandonati.me</li>
                         <li><a href="https://www.linkedin.com/in/juliandonati/" target="_blank"  className="text-blue-900 underline">Mi Linkedin</a></li>
                     </ul>
                 </div>
